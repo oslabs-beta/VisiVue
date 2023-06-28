@@ -8,7 +8,7 @@ const extConfig: webpack.Configuration = {
   target: "node",
   entry: "./src/extension.ts",
   output: {
-    filename: "extension.js",
+    filename: "",
     libraryTarget: "commonjs2",
     path: path.resolve(__dirname, "out"),
   },
