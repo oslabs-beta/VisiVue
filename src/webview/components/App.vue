@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>Whatsup team sGlaceon!!!!!</h1>
+    <h1>sWhatsup steam sGlaceon!!!!!</h1>
   </div>
 </template>
 
