@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="test">
     <h1>sWhatsup steam sGlaceon!!!!!</h1>
   </div>
 </template>
@@ -8,7 +8,7 @@
 
 <style>
 #test {
-  background-color: rgb(32, 23, 148);
+  background-color: rgb(44, 13, 129);
   display: flex;
   align-items: center;
   justify-content: center;
