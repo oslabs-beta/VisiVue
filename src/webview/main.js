@@ -1,4 +1,5 @@
 import { createApp } from "vue";
 import App from "./components/App";
+import FileImport from "./components/FileImport";
 
-createApp(App).mount("#app");
+createApp(FileImport).mount("#app");

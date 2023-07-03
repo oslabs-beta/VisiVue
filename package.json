@@ -61,6 +61,7 @@
     "style-loader": "^3.3.3",
     "ts-node": "^10.9.1",
     "vue": "^3.3.4",
+    "vue-flow": "^0.3.0",
     "vue-loader": "^17.2.2",
     "vue-template-compiler": "^2.7.14"
   }
