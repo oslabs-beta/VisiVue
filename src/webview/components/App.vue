@@ -10,8 +10,8 @@ import { Background } from "@vue-flow/background";
 import { Controls } from "@vue-flow/controls";
 import { MiniMap } from "@vue-flow/minimap";
 import { ref } from "vue";
-import { initialElements } from "./initial-elements";
-// import { initialElements } from "./elements";
+// import { initialElements } from "./initial-elements";
+import { initialElements } from "./elements";
 
 /**
  * useVueFlow provides all event handlers and store properties
