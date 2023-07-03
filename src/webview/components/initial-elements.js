@@ -11,9 +11,10 @@ export const initialElements = [
   {
     id: "1",
     type: "input",
-    label: "main.js",
+    label: "monday.js",
     position: { x: 250, y: 0 },
     class: "light",
+    parentId: 0,
   },
   {
     id: "2",
@@ -21,17 +22,36 @@ export const initialElements = [
     label: "App.vue",
     position: { x: 250, y: 100 },
     class: "light",
+    parentId: "1",
   },
-  { id: "3", label: "MainContainer.vue", position: { x: 250, y: 200 }, class: "light" },
-  { id: "4", label: "MainDisplay.vue", position: { x: 150, y: 300 }, class: "light" },
+  {
+    id: "3",
+    label: "MainContainer.vue",
+    position: { x: 250, y: 200 },
+    class: "light",
+    parentId: "2",
+  },
+  {
+    id: "4",
+    label: "MainDisplay.vue",
+    position: { x: 150, y: 300 },
+    class: "light",
+    parentId: "3",
+  },
   {
     id: "5",
     type: "output",
     label: "Content.vue",
     position: { x: 350, y: 300 },
     class: "light",
+    parentId: "3",
   },
-  { id: "e1-2", source: "1", target: "2", animated: false },
+  { 
+    id: "e1-2", 
+    source: "1", 
+    target: "2", 
+    // animated: false 
+  },
   {
     id: "e2-3",
     type: "smoothstep",
