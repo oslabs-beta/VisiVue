@@ -1,6 +1,7 @@
 import * as vueCompiler from 'vue-template-compiler';
 import * as path from 'path';
 import { Tree } from './types/Tree';
+import { getNonce } from './getNonce'
 
 export class Parser {
   entryFile: string;
@@ -8,9 +9,9 @@ export class Parser {
 
   constructor(filePath: string) {
     this.entryFile = filePath;
-    console.log('this.entryFile: ', this.entryFile);
+    // console.log('this.entryFile: ', this.entryFile);
     // conditionals checking if OS is windows
-    console.log("filePath: ", filePath);
+    // console.log("filePath: ", filePath);
     if (process.platform === 'linux' && this.entryFile.includes('wsl$')){
       // string manipulation to make sure the entryFile matches what we need for when we reference it in the
       // root definition in the parse method
@@ -24,8 +25,30 @@ export class Parser {
     this.tree = undefined;
   }
 
+  public parse() {
+    const root = {
+      id: getNonce(),
+      name: path.basename(this.entryFile).replace(/\.vue?$/, ''),
+      fileName: path.basename(this.entryFile),
+      filePath: this.entryFile,
+      importPath: '/',
+      expanded: false,
+      depth: 0,
+      count: 1,
+      thirdParty: false,
+      children: [],
+      parentList: [],
+      props: {},
+      error: ''
+    };
+    console.log(root)
+    this.tree = root;
+    // this.parser(root);
+    return this.tree;
+  }
+
   public getTree(): Tree{
-    console.log("from getTree() (should be undefined): ", this.tree);
+    // console.log("from getTree() (should be undefined): ", this.tree);
     return this.tree!;
   }
 }

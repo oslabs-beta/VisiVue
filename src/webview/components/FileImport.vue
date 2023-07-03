@@ -1,7 +1,6 @@
 <template>
     <div>
       <input type="file" @change="handleFileUpload">
-      <button @click="tester" :style="{ backgroundColor: buttonColor }">tester</button>
       <div >{{ string }}</div>
     </div>
   </template>
@@ -9,7 +8,6 @@
 <script setup>
   import { ref } from 'vue';
   const string = ref('statar')
-  const buttonColor = ref('blue');
 
   const vscode = acquireVsCodeApi();
   
@@ -24,9 +22,6 @@
         value: filePath
       });
 		}
-	}
-	function tester() {
-	buttonColor.value = buttonColor.value === 'blue' ? 'red' : 'blue';
 	}
 
 </script>

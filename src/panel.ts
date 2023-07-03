@@ -60,10 +60,11 @@ export default class Panel {
       async (msg: any) => {
         switch (msg.type) {
           case 'onFile':
-            if (!msg.value) break;
-            this.parser = new Parser(msg.value);
-            // this.parser.parse();
-            this.updateView();
+            if (msg.value){
+              this.parser = new Parser(msg.value);
+              this.parser.parse();
+              this.updateView();
+            }
             break;
           case 'onViewFile':
             if (!msg.value) return;
