@@ -65,7 +65,6 @@
     "style-loader": "^3.3.3",
     "ts-node": "^10.9.1",
     "vscode": "^1.1.37",
-    "vscode-uri": "^3.0.7",
     "vue": "^3.3.4",
     "vue-flow": "^0.3.0",
     "vue-loader": "^17.2.2",
