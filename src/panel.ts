@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { URI } from 'vscode-uri';
 import { Parser } from './parser';
 
 export default class Panel {
@@ -53,24 +54,50 @@ export default class Panel {
     //Listen for when the panel gets disposed
     //disposed - when the user closes the panel or when closed programatically (thru code)
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-    
+    console.log("Panel is Created");
     // VSCode API Native Method: onDidReceiveMessage() = event that fires when webview content posts a message
     // Webview content can only post strings of json serializable objects back to our extension
     this._panel.webview.onDidReceiveMessage(
       async (msg: any) => {
-        switch (msg.command) {
-          case 'startup':
-            console.log('message received');
+        switch (msg.type) {
+          case 'onFile':
+            if (msg.value){
+              this.parser = new Parser(msg.value);
+              this.parser.parse();
+              this.updateView();
+            }
             break;
-          case 'testing':
-            console.log('testing');
-            this._panel!.webview.postMessage({ command: 'refactor' });
+          case 'onViewFile':
+            if (!msg.value) return;
+            const doc = await vscode.workspace.openTextDocument(msg.value);
+            const editor = await vscode.window.showTextDocument(doc, {
+              preserveFocus: false,
+              preview: false
+            });
             break;
         }
       },
       null,
       this._disposables
     );
+  }
+  
+  private async updateView() {
+    // Saves current state of the tree to the workspace state
+    const tree = this.parser!.getTree();
+    this._context.workspaceState.update('sVueTree', tree);
+    this._panel.webview.postMessage({
+      type: 'parsed-data',
+      value: tree,
+      settings: await vscode.workspace.getConfiguration('sVueTree')
+    })
+    
+    // Sends the updated tree to webview
+    this._panel.webview.postMessage({
+      type: 'parsed-data',
+      value: tree,
+      settings: await vscode.workspace.getConfiguration('sVueTree'),
+    });
   }
   
   // method to clear disposables array and 'clean' the data
@@ -92,11 +119,9 @@ export default class Panel {
   // convert our file to a uri that webview can interpret
     // We do this for our scripts well as our styles
   private _getHtmlForWebview(webview: vscode.Webview) {
+    // @ts-ignore
+    const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'main.wv.js'));
     
-    const scriptUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, 'out', 'main.wv.js')
-    );
-      
     // const styleUri = webview.asWebviewUri(
     //   vscode.Uri.joinPath(this._extensionUri, 'media', 'styles.css')
     // );

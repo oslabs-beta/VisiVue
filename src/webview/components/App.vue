@@ -1,77 +1,107 @@
-<!-- <script setup>
-import { Panel, PanelPosition, VueFlow, isNode, useVueFlow } from '@vue-flow/core'
-import { Background } from '@vue-flow/background'
-import { Controls } from '@vue-flow/controls'
-import { MiniMap } from '@vue-flow/minimap'
-import { ref } from 'vue'
-import { initialElements } from './initial-elements.js'
+<script setup>
+import {
+  Panel,
+  PanelPosition,
+  VueFlow,
+  isNode,
+  useVueFlow,
+} from "@vue-flow/core";
+import { Background } from "@vue-flow/background";
+import { Controls } from "@vue-flow/controls";
+import { MiniMap } from "@vue-flow/minimap";
+import { ref } from "vue";
+// import { initialElements } from "./initial-elements";
+import { initialElements } from "./elements";
 
 /**
  * useVueFlow provides all event handlers and store properties
  * You can pass the composable an object that has the same properties as the VueFlow component props
  */
-const { onPaneReady, onNodeDragStop, onConnect, addEdges, setTransform, toObject } = useVueFlow()
+const {
+  onPaneReady,
+  onNodeDragStop,
+  onConnect,
+  addEdges,
+  setTransform,
+  toObject,
+} = useVueFlow();
 
 /**
  * Our elements
  */
-const elements = ref(initialElements)
+const elements = ref(initialElements); // imports array of nodes and edges and stores to state (at 'elements.value')
 
 /**
  * This is a Vue Flow event-hook which can be listened to from anywhere you call the composable, instead of only on the main component
  *
  * onPaneReady is called when viewpane & nodes have visible dimensions
  */
-onPaneReady(({ fitView }) => {
-  fitView()
-})
 
-onNodeDragStop((e) => console.log('drag stop', e))
+// What does this do????
+onPaneReady(({ fitView }) => {
+  fitView();
+});
+
+// What does this do????
+onNodeDragStop((e) => console.log("drag stop", e));
 
 /**
  * onConnect is called when a new connection is created.
  * You can add additional properties to your new edge (like a type or label) or block the creation altogether
  */
-onConnect((params) => addEdges(params))
 
-const dark = ref(false)
+// What is this doing exactly????
+onConnect((params) => addEdges(params));
+
+// initialize 'dark' in state and set to false:
+const dark = ref(false);
 
 /**
  * To update node properties you can simply use your elements v-model and mutate the elements directly
  * Changes should always be reflected on the graph reactively, without the need to overwrite the elements
  */
+
+// What does this do???
 function updatePos() {
   return elements.value.forEach((el) => {
     if (isNode(el)) {
       el.position = {
+        // What is this doing exactly???
         x: Math.random() * 400,
         y: Math.random() * 400,
-      }
+      };
     }
-  })
+  });
 }
 
 /**
  * toObject transforms your current graph data to an easily persist-able object
  */
 function logToObject() {
-  return console.log(toObject())
+  return console.log(toObject());
 }
 
 /**
  * Resets the current viewpane transformation (zoom & pan)
  */
 function resetTransform() {
-  return setTransform({ x: 0, y: 0, zoom: 1 })
+  return setTransform({ x: 0, y: 0, zoom: 1 });
 }
 
 function toggleClass() {
-  return (dark.value = !dark.value)
+  return (dark.value = !dark.value);
 }
 </script>
 
 <template>
-  <VueFlow v-model="elements" :class="{ dark }" class="basicflow" :default-viewport="{ zoom: 1.5 }" :min-zoom="0.2" :max-zoom="4">
+  <VueFlow
+    v-model="elements"
+    :class="{ dark }"
+    class="basicflow"
+    :default-viewport="{ zoom: 1.5 }"
+    :min-zoom="0.2"
+    :max-zoom="4"
+  >
     <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
 
     <MiniMap />
@@ -79,13 +109,24 @@ function toggleClass() {
     <Controls />
 
     <Panel :position="PanelPosition.TopRight" class="controls">
-      <button style="background-color: #113285; color: white" title="Reset Transform" @click="resetTransform">
+      <button
+        style="background-color: #113285; color: white"
+        title="Reset Transform"
+        @click="resetTransform"
+      >
         <svg width="16" height="16" viewBox="0 0 32 32">
-          <path fill="#FFFFFB" d="M18 28A12 12 0 1 0 6 16v6.2l-3.6-3.6L1 20l6 6l6-6l-1.4-1.4L8 22.2V16a10 10 0 1 1 10 10Z" />
+          <path
+            fill="#FFFFFB"
+            d="M18 28A12 12 0 1 0 6 16v6.2l-3.6-3.6L1 20l6 6l6-6l-1.4-1.4L8 22.2V16a10 10 0 1 1 10 10Z"
+          />
         </svg>
       </button>
 
-      <button style="background-color: #6f3381" title="Shuffle Node Positions" @click="updatePos">
+      <button
+        style="background-color: #6f3381"
+        title="Shuffle Node Positions"
+        @click="updatePos"
+      >
         <svg width="16" height="16" viewBox="0 0 24 24">
           <path
             fill="#FFFFFB"
@@ -95,7 +136,10 @@ function toggleClass() {
       </button>
 
       <button
-        :style="{ backgroundColor: dark ? '#FFFFFB' : '#292524', color: dark ? '#292524' : '#FFFFFB' }"
+        :style="{
+          backgroundColor: dark ? '#FFFFFB' : '#292524',
+          color: dark ? '#292524' : '#FFFFFB',
+        }"
         @click="toggleClass"
       >
         <template v-if="dark">
@@ -127,4 +171,82 @@ function toggleClass() {
       </button>
     </Panel>
   </VueFlow>
-</template> -->
+</template>
+
+<style>
+@import "https://cdn.jsdelivr.net/npm/@vue-flow/core@1.20.2/dist/style.css";
+@import "https://cdn.jsdelivr.net/npm/@vue-flow/core@1.20.2/dist/theme-default.css";
+@import "https://cdn.jsdelivr.net/npm/@vue-flow/controls@latest/dist/style.css";
+@import "https://cdn.jsdelivr.net/npm/@vue-flow/minimap@latest/dist/style.css";
+@import "https://cdn.jsdelivr.net/npm/@vue-flow/node-resizer@latest/dist/style.css";
+
+html,
+body,
+#app {
+  margin: 0;
+  height: 100%;
+  background-color: #134c84;
+}
+
+#app {
+  text-transform: uppercase;
+  font-family: "JetBrains Mono", monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.vue-flow__minimap {
+  transform: scale(75%);
+  transform-origin: bottom right;
+}
+
+.basicflow .vue-flow__node {
+  background: #bf7eff;
+  color: #414141;
+  border: 2px solid rgb(0, 0, 0);
+}
+
+.basicflow.dark {
+  background: #272727;
+  color: rgba(0, 0, 0, 0.2);
+}
+.basicflow.dark .vue-flow__node {
+  background: #494949;
+  color: #fffffb;
+  border: 2px solid rgb(149, 0, 255);
+}
+.basicflow.dark .vue-flow__controls .vue-flow__controls-button {
+  background: #292524;
+  fill: #fffffb;
+  border-color: #fffffb;
+}
+.basicflow.dark .vue-flow__edge-textbg {
+  fill: #292524;
+}
+.basicflow.dark .vue-flow__edge-text {
+  fill: #fffffb;
+}
+.basicflow .controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.basicflow .controls button {
+  padding: 4px;
+  border-radius: 5px;
+  font-weight: 600;
+  -webkit-box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 10px #0000004d;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.basicflow .controls button:hover {
+  transform: scale(102%);
+  transition: 0.25s all ease;
+}
+</style>
