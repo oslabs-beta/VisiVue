@@ -8,13 +8,11 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(test);
 
-  let disposable = vscode.commands.registerCommand(
-    "extension.showPanel",
-    () => {
-      vscode.window.showInformationMessage("Panel shown from extension.");
-      Panel.createOrShow(context);
-    }
-  );
+	let disposable = vscode.commands.registerCommand('extension.showPanel', () => {
+		vscode.window.showInformationMessage('Panel shown from extension.');
+    // @ts-ignore
+		Panel.createOrShow(context);
+	});
 
   context.subscriptions.push(disposable);
 }

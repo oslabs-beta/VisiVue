@@ -41,7 +41,7 @@ export class Parser {
       props: {},
       error: ''
     };
-    console.log(root)
+    // console.log(root)
     this.tree = root;
     // this.parser(root);
     return this.tree;

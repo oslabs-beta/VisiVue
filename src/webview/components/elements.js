@@ -2,27 +2,27 @@ const tree = {
   children: [
     {
       children: [
-        // {
-        //   children: [],
-        //   count: 1,
-        //   depth: 0,
-        //   error: "",
-        //   expanded: false,
-        //   fileName: "GrandBaby One",
-        //   filePath:
-        //     "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
-        //   id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
-        //   importPath: "/",
-        //   name: "Sidebar",
-        //   parentList: [
-        //     "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
-        //   ],
-        //   props: { propOne: true, propTwo: true },
-        //   reactRouter: false,
-        //   reduxConnect: false,
-        //   thirdParty: false,
-        //   // [[Prototype]]: Object,
-        // },
+        {
+          children: [],
+          count: 1,
+          depth: 0,
+          error: "",
+          expanded: false,
+          fileName: "GrandBaby One",
+          filePath:
+            "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
+          id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
+          importPath: "/",
+          name: "Sidebar",
+          parentList: [
+            "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
+          ],
+          props: { propOne: true, propTwo: true },
+          reactRouter: false,
+          reduxConnect: false,
+          thirdParty: false,
+          // [[Prototype]]: Object,
+        },
       ],
       count: 1,
       depth: 0,
@@ -47,27 +47,27 @@ const tree = {
       children: [
         {
           children: [
-            // {
-            //   children: [],
-            //   count: 1,
-            //   depth: 0,
-            //   error: "",
-            //   expanded: false,
-            //   fileName: "Great G-Baby One",
-            //   filePath:
-            //     "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
-            //   id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
-            //   importPath: "/",
-            //   name: "Sidebar",
-            //   parentList: [
-            //     "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
-            //   ],
-            //   props: { propOne: true, propTwo: true },
-            //   reactRouter: false,
-            //   reduxConnect: false,
-            //   thirdParty: false,
-            //   // [[Prototype]]: Object,
-            // },
+            {
+              children: [],
+              count: 1,
+              depth: 0,
+              error: "",
+              expanded: false,
+              fileName: "Great G-Baby One",
+              filePath:
+                "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
+              id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
+              importPath: "/",
+              name: "Sidebar",
+              parentList: [
+                "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
+              ],
+              props: { propOne: true, propTwo: true },
+              reactRouter: false,
+              reduxConnect: false,
+              thirdParty: false,
+              // [[Prototype]]: Object,
+            },
           ],
           count: 1,
           depth: 0,

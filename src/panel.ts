@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { URI } from 'vscode-uri';
 import { Parser } from './parser';
 
 export default class Panel {
@@ -118,11 +119,9 @@ export default class Panel {
   // convert our file to a uri that webview can interpret
     // We do this for our scripts well as our styles
   private _getHtmlForWebview(webview: vscode.Webview) {
+    // @ts-ignore
+    const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'main.wv.js'));
     
-    const scriptUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, 'out', 'main.wv.js')
-    );
-      
     // const styleUri = webview.asWebviewUri(
     //   vscode.Uri.joinPath(this._extensionUri, 'media', 'styles.css')
     // );
