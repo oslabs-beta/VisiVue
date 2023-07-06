@@ -12,6 +12,7 @@ import { MiniMap } from "@vue-flow/minimap";
 import { ref } from "vue";
 // import { initialElements } from "./initial-elements";
 import { initialElements } from "./elements";
+import Node from "./NodeTemplate";
 
 /**
  * useVueFlow provides all event handlers and store properties
@@ -61,7 +62,7 @@ const dark = ref(false);
  * Changes should always be reflected on the graph reactively, without the need to overwrite the elements
  */
 
-// What does this do???
+// Currently randomizes node positions, called on click of Panel button.  Change this to switch from vertical tree to horizontal tree:
 function updatePos() {
   return elements.value.forEach((el) => {
     if (isNode(el)) {
@@ -77,6 +78,7 @@ function updatePos() {
 /**
  * toObject transforms your current graph data to an easily persist-able object
  */
+// Invoked on click of Panel button:
 function logToObject() {
   return console.log(toObject());
 }
@@ -84,10 +86,12 @@ function logToObject() {
 /**
  * Resets the current viewpane transformation (zoom & pan)
  */
+// Change this to re-render the file in Vue Flow:
 function resetTransform() {
   return setTransform({ x: 0, y: 0, zoom: 1 });
 }
 
+//
 function toggleClass() {
   return (dark.value = !dark.value);
 }
@@ -102,7 +106,8 @@ function toggleClass() {
     :min-zoom="0.2"
     :max-zoom="4"
   >
-    <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
+
+    <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" :variant="true" />
 
     <MiniMap />
 
