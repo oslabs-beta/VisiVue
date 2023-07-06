@@ -8,10 +8,32 @@ export type Tree = {
   depth: number;
   count: number;
   thirdParty: boolean;
-  // reactRouter: boolean;
-  // reduxConnect: boolean;
   children: Tree[];
   parentList: string[];
-  props: { [key: string]: boolean; };
+  props: {
+    oneWay: string[];
+    twoWay: string[];
+  };
+  allVariables: string[];
   error: string;
 };
+
+export class ChildNode<Tree> {
+  id: string;
+  name: string;
+  fileName: string;
+  filePath: string;
+  importPath: string;
+  expanded: boolean;
+  depth: number;
+  count: number;
+  thirdParty: boolean;
+  children: Tree[];
+  parentList: string[];
+  props: {
+    oneWay: string[];
+    twoWay: string[];
+  };
+  allVariables: string[];
+  error: string;
+}

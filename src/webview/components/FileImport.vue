@@ -1,12 +1,10 @@
 <template>
-    <div id="file-import" >
-      <label for="file-input" id="file-input-label">
-        S
-      </label>
-      <input id="file-input" type="file" @change="handleFileUpload">
-      <!-- <div >{{ string }}</div> -->
-    </div>
-  </template>
+    <label class="btn btn-xs btn-primary">
+      <input type="file" name="attachment[]" id="fileId" @change="handleFileUpload" multiple/>
+      Upload file
+    </label>
+    <div>{{ string }}</div>
+</template>
   
 <script setup>
   import { ref } from 'vue';
