@@ -107,7 +107,7 @@ function toggleClass() {
     :max-zoom="4"
   >
 
-    <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" :variant="true" />
+    <Background :pattern-color="dark ? '#FFFFFB' : '#134c84'" :variant="true" />
 
     <MiniMap />
 
@@ -190,8 +190,10 @@ body,
 #app {
   margin: 0;
   height: 100%;
-  background-color: #134c84;
+  background: #272727;
 }
+
+
 
 #app {
   text-transform: uppercase;
@@ -208,15 +210,17 @@ body,
 }
 
 .basicflow .vue-flow__node {
-  background: #bf7eff;
+  background: #646464;
   color: #414141;
-  border: 2px solid rgb(0, 0, 0);
+  border: 1px solid rgb(191, 99, 252);
+  box-shadow: 0 .15rem .2rem .4rem rgba(252, 99, 232, 0.2)
 }
 
 .basicflow.dark {
   background: #272727;
   color: rgba(0, 0, 0, 0.2);
 }
+
 .basicflow.dark .vue-flow__node {
   background: #494949;
   color: #fffffb;
