@@ -30,7 +30,7 @@ const {
 /**
  * Our elements
  */
-const elements = ref(initialElements); // imports array of nodes and edges and stores to state (at 'elements.value')
+const elements = ref(initialElements); //  imports array of nodes and edges and stores to state (at 'elements.value')
 
 /**
  * This is a Vue Flow event-hook which can be listened to from anywhere you call the composable, instead of only on the main component
