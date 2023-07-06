@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { URI } from 'vscode-uri';
 import { Parser } from './parser';
 
 export default class Panel {
@@ -90,7 +89,7 @@ export default class Panel {
       type: 'parsed-data',
       value: tree,
       settings: await vscode.workspace.getConfiguration('sVueTree')
-    })
+    });
     
     // Sends the updated tree to webview
     this._panel.webview.postMessage({
