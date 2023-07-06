@@ -12,6 +12,7 @@ import { MiniMap } from "@vue-flow/minimap";
 import { ref } from "vue";
 // import { initialElements } from "./initial-elements";
 import { initialElements } from "./elements";
+import Node from "./NodeTemplate";
 
 /**
  * useVueFlow provides all event handlers and store properties
@@ -29,7 +30,7 @@ const {
 /**
  * Our elements
  */
-const elements = ref(initialElements); // imports array of nodes and edges and stores to state (at 'elements.value')
+const elements = ref(initialElements); //  imports array of nodes and edges and stores to state (at 'elements.value')
 
 /**
  * This is a Vue Flow event-hook which can be listened to from anywhere you call the composable, instead of only on the main component
@@ -61,7 +62,7 @@ const dark = ref(false);
  * Changes should always be reflected on the graph reactively, without the need to overwrite the elements
  */
 
-// What does this do???
+// Currently randomizes node positions, called on click of Panel button.  Change this to switch from vertical tree to horizontal tree:
 function updatePos() {
   return elements.value.forEach((el) => {
     if (isNode(el)) {
@@ -77,6 +78,7 @@ function updatePos() {
 /**
  * toObject transforms your current graph data to an easily persist-able object
  */
+// Invoked on click of Panel button:
 function logToObject() {
   return console.log(toObject());
 }
@@ -84,10 +86,12 @@ function logToObject() {
 /**
  * Resets the current viewpane transformation (zoom & pan)
  */
+// Change this to re-render the file in Vue Flow:
 function resetTransform() {
   return setTransform({ x: 0, y: 0, zoom: 1 });
 }
 
+//
 function toggleClass() {
   return (dark.value = !dark.value);
 }
@@ -102,7 +106,8 @@ function toggleClass() {
     :min-zoom="0.2"
     :max-zoom="4"
   >
-    <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
+
+    <Background :pattern-color="dark ? '#FFFFFB' : '#134c84'" :variant="true" />
 
     <MiniMap />
 
@@ -185,8 +190,10 @@ body,
 #app {
   margin: 0;
   height: 100%;
-  background-color: #134c84;
+  background: #272727;
 }
+
+
 
 #app {
   text-transform: uppercase;
@@ -203,15 +210,17 @@ body,
 }
 
 .basicflow .vue-flow__node {
-  background: #bf7eff;
+  background: #646464;
   color: #414141;
-  border: 2px solid rgb(0, 0, 0);
+  border: 1px solid rgb(191, 99, 252);
+  box-shadow: 0 .15rem .2rem .4rem rgba(252, 99, 232, 0.2)
 }
 
 .basicflow.dark {
   background: #272727;
   color: rgba(0, 0, 0, 0.2);
 }
+
 .basicflow.dark .vue-flow__node {
   background: #494949;
   color: #fffffb;
