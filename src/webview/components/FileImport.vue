@@ -4,7 +4,7 @@
       Upload file
     </label>
     <div>{{ string }}</div>
-  </template>
+</template>
   
 <script setup>
   import { ref } from 'vue';
