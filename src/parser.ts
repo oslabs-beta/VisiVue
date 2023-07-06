@@ -65,7 +65,6 @@ export class Parser {
       componentTree.error = 'File not found';
       return;
     }
-
     if (componentTree.parentList.includes(componentTree.filePath)) {
       return;
     }
@@ -106,7 +105,7 @@ export class Parser {
 
     let ast = template.ast;
     console.log("ast: ", ast);
-    
+    //We need to populate componentTree children array with tree objects for each child
     componentTree.children.forEach((child) => this.parser(child));
     
     return componentTree;
