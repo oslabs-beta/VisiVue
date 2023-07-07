@@ -27,7 +27,7 @@ function handleFileUpload(event) {
     });
   }
 }
-
+ 
 </script>
 
 <style>
