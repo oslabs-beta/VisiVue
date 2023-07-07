@@ -12,6 +12,7 @@ import { MiniMap } from "@vue-flow/minimap";
 import { ref } from "vue";
 // import { initialElements } from "./initial-elements";
 import { initialElements } from "./elements";
+import FileImport from "./FileImport";
 
 /**
  * useVueFlow provides all event handlers and store properties
@@ -94,6 +95,8 @@ function toggleClass() {
 </script>
 
 <template>
+  
+  
   <VueFlow
     v-model="elements"
     :class="{ dark }"
@@ -102,11 +105,13 @@ function toggleClass() {
     :min-zoom="0.2"
     :max-zoom="4"
   >
-    <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
-
+    <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" :variant="true" />
+      
     <MiniMap />
 
     <Controls />
+
+    <FileImport />
 
     <Panel :position="PanelPosition.TopRight" class="controls">
       <button
@@ -169,6 +174,7 @@ function toggleClass() {
           />
         </svg>
       </button>
+      
     </Panel>
   </VueFlow>
 </template>
@@ -185,6 +191,7 @@ body,
 #app {
   margin: 0;
   height: 100%;
+  width: 100;
   background-color: #134c84;
 }
 
@@ -194,7 +201,6 @@ body,
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: rgba(255, 255, 255, 0.2);
 }
 
 .vue-flow__minimap {
@@ -203,9 +209,10 @@ body,
 }
 
 .basicflow .vue-flow__node {
-  background: #bf7eff;
+  background: #d986f9;
   color: #414141;
   border: 2px solid rgb(0, 0, 0);
+  border-radius: 1rem;
 }
 
 .basicflow.dark {
@@ -232,7 +239,7 @@ body,
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
+  gap: 8;
 }
 .basicflow .controls button {
   padding: 4px;
