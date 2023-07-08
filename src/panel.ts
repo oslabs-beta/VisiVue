@@ -61,8 +61,9 @@ export default class Panel {
         switch (msg.type) {
           case 'onFile':
             if (msg.value){
+              // directs us to parser file
               this.parser = new Parser(msg.value);
-              this.parser.parse();
+              this.parser.entryFileParse();
               this.updateView();
             }
             break;
@@ -89,13 +90,6 @@ export default class Panel {
       type: 'parsed-data',
       value: tree,
       settings: await vscode.workspace.getConfiguration('sVueTree')
-    });
-    
-    // Sends the updated tree to webview
-    this._panel.webview.postMessage({
-      type: 'parsed-data',
-      value: tree,
-      settings: await vscode.workspace.getConfiguration('sVueTree'),
     });
   }
   

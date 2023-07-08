@@ -1,20 +1,20 @@
 <template>
     <label class="btn btn-xs btn-primary">
       <input type="file" name="attachment[]" id="fileId" @change="handleFileUpload" multiple/>
-      Upload file
     </label>
     <div>{{ string }}</div>
 </template>
   
 <script setup>
   import { ref } from 'vue';
-  const string = ref('statar')
+  // note that state using ref are objects so u have to access the value prop to get the value
+  let string = ref('statar')
 
   const vscode = acquireVsCodeApi();
   
 	function handleFileUpload(event) {
     event.preventDefault();
-    const filePath = event.target.value;
+    const filePath = event.target.files[0].path;
     event.target.value = null;
     string.value = filePath;
     if (filePath) {

@@ -18,7 +18,10 @@ export class Parser {
   tree: Tree | undefined;
 
   constructor(filePath: string) {
+    // mac
     this.entryFile = filePath;    // conditionals checking if OS is windows
+
+    // windows
     if (process.platform === 'linux' && this.entryFile.includes('wsl$')){
       // string manipulation to make sure the entryFile matches what we need for when we reference it in the
       // root definition in the parse method
@@ -32,11 +35,11 @@ export class Parser {
     this.tree = undefined;
   }
 
-  public parse() {
+  public entryFileParse() {
     const root = {
       id: getNonce(),
-      name: path.basename(this.entryFile).replace(/\.vue?$/, ''),
-      fileName: path.basename(this.entryFile),
+      name: path.basename(this.entryFile).replace(/\.vue?$/, ''), // log = App
+      fileName: path.basename(this.entryFile), // log = App.vue
       filePath: this.entryFile,
       importPath: '/',
       expanded: false,
