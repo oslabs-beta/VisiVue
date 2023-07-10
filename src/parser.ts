@@ -9,16 +9,12 @@ import { type } from 'os';
 import { isPropertyAssignment } from 'typescript';
 import * as vueTemplateCompiler from 'vue-template-compiler';
 import * as vueCompiler from '@vue/compiler-sfc';
+// import { traverseNode, createTransformContext, transform } from '@vue/compiler-core'
+import { parse, transform } from '@vue/compiler-dom';
 // import traverseNode from '@vue/compiler-sfc/dist/compiler-sfc.cjs';
-const traverse = require('@babel/traverse').default;
+// const traverse = require('@babel/traverse').default;
 // import { parse }from '@vue/compiler-sfc';
 // import { compile } from 'vue-template-compiler';
-
-// ----FILE PATH OF TEST PROJECT ----
-  // ROOT: /Users/chrispark/MultiComponentVue/src/App.vue
-    // CHILD 1: /Users/chrispark/MultiComponentVue/src/components1/HelloWorld.vue
-    // CHILD 2: /Users/chrispark/MultiComponentVue/src/components1/TheWelcome.vue
-      // CHILD OF CHILD 2: /Users/chrispark/MultiComponentVue/src/components1/WelcomeItem.vue
 
 export class Parser {
   entryFile: string;
@@ -60,12 +56,13 @@ export class Parser {
     };
     this.tree = root;
 		// store AST that parser function creates (Array of Objects) in AST variable to send to panel.ts 
-    const AST = this.parser(root);
+    this.parser(this.tree);
     return this.tree;
   }
 
 	// DON'T FORGET TO CHANGE TYPES LATER AFTER TESTING IS DONE
   private parser(root: Tree): void {
+    console.log('root before iteration', root)
     const { fileName, fileDirname } = root;
     // get the filePath
 		const queue = [root];
@@ -73,19 +70,13 @@ export class Parser {
 		// iterate through tree 
 		while(queue.length !== 0) {
 			let curr: any = queue.shift();
-			let sourceCode: string = fs.readFileSync(path.resolve(curr.filePath)).toString();
+      
+			let sourceCode: string = fs.readFileSync(path.resolve(curr.filePath)).toString(); 
 
-      const { descriptor } = vueCompiler.parse(sourceCode);
-
-      const template = descriptor.template;
-      console.log(`${curr} template:` , template);
-
-      const templateAst = template.ast;
-      console.log(`${curr} template:`, templateAst);
-
-			const arrOfChildren = this.getChildren(sourceCode, curr.fileName, id);
+			const arrOfChildren = this.getChildren(sourceCode, curr.fileName, id); // 1st iteration passing in App.vue --> [HelloWorld, TheWelcome]
       // iterate through array of child components and instantiate a new ChildNode class
       arrOfChildren.forEach((child) => {
+        const twoWays = this.extractTwoWayBoundVariables(sourceCode, child);
         id = `${+id + 1}`;
         const path = fileDirname + '/components/' + `${child}.vue`;
         const childNode = {
@@ -104,12 +95,14 @@ export class Parser {
           allVariables: [],
           error: ''
         };
+        twoWays.forEach(el => {
+          childNode.props.twoWay.push(el.exp.content)
+        })
         curr.children.push(childNode);
         queue.push(childNode);
       });
 		}
-    const traverseTest = vueCompiler.traverseNode(root);
-    console.log('testing traverseNode on root: ', traverseTest);
+
   };
 
   public getTree(): Tree{
@@ -121,6 +114,39 @@ export class Parser {
     const arrOfChildren = vueCompiler.compileTemplate({ source: sourceCode, filename, id }).ast.components;
     return arrOfChildren;
   }
+
+  public extractTwoWayBoundVariables(template: string, component: string): any[] {
+    const variables = [];
+    const ast = parse(template); // Parse the Vue template
+    transform(ast, {
+      nodeTransforms: [
+        (node) => {
+          if (node.hasOwnProperty('tag')) {
+            if (node['tag'] === component) {
+              console.log("NODE: ", node);
+              if (
+                node.type === 1 && // Element node
+                node.props.some((prop) => prop.type === 7 && prop.name === 'model') // v-model directive
+              ) {
+                const modelDirective = node.props.find((prop) => prop.type === 7 && prop.name === 'model');
+                console.log('MODEL DIRECTIVE: ', modelDirective);
+                variables.push(modelDirective);
+              }
+            }
+            
+          }
+        }
+      ]
+    });
+    return variables;
+  }
+}
+    // console.log('root after iteration', root);
+    // const context = createTransformContext(root, {});
+    // console.log('context from createTransformContext func', context);
+    // const traverseTest = traverseNode(root, context);
+    // console.log('testing traverseNode on root: ', traverseTest);
+
   // private getScriptVariables(scriptAst: babelParser.ParseResult<File>): string[]{
   //     const vars = [];
   //     traverse(scriptAst, {
@@ -133,5 +159,3 @@ export class Parser {
   //     });
   //     return vars;
   //   }
-  
-}
