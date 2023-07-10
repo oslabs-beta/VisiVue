@@ -9,6 +9,7 @@ import { type } from 'os';
 import { isPropertyAssignment } from 'typescript';
 import * as vueTemplateCompiler from 'vue-template-compiler';
 import * as vueCompiler from '@vue/compiler-sfc';
+// import traverseNode from '@vue/compiler-sfc/dist/compiler-sfc.cjs';
 const traverse = require('@babel/traverse').default;
 // import { parse }from '@vue/compiler-sfc';
 // import { compile } from 'vue-template-compiler';
@@ -49,6 +50,7 @@ export class Parser {
       fileDirname: path.dirname(this.entryFile), ///Users/chrispark/MultiComponentVue/src/
       importPath: '/',
       parentList: [],
+      children: [],
       props: {
         oneWay: [],
         twoWay: []
@@ -63,42 +65,51 @@ export class Parser {
   }
 
 	// DON'T FORGET TO CHANGE TYPES LATER AFTER TESTING IS DONE
-  private parser(root: Tree): any| undefined {
+  private parser(root: Tree): void {
     const { fileName, fileDirname } = root;
-		let finalAST: any[] = [];
     // get the filePath
-    // const fileName = root.fileName; // --> App.vue
 		const queue = [root];
     let id = root.id;
 		// iterate through tree 
 		while(queue.length !== 0) {
 			let curr: any = queue.shift();
 			let sourceCode: string = fs.readFileSync(path.resolve(curr.filePath)).toString();
-			const arrOfChildren = this.getChildren(sourceCode, fileName, id);
+
+      const { descriptor } = vueCompiler.parse(sourceCode);
+
+      const template = descriptor.template;
+      console.log(`${curr} template:` , template);
+
+      const templateAst = template.ast;
+      console.log(`${curr} template:`, templateAst);
+
+			const arrOfChildren = this.getChildren(sourceCode, curr.fileName, id);
       // iterate through array of child components and instantiate a new ChildNode class
-      arrOfChildren.forEach((el) => {
+      arrOfChildren.forEach((child) => {
         id = `${+id + 1}`;
-        const path = fileDirname + '/components/' + `${el}.vue`;
-        queue.push({
+        const path = fileDirname + '/components/' + `${child}.vue`;
+        const childNode = {
           id: id,
-          name: el, // log = App
-          fileName: `${el}.vue`, // log = App.vue
+          name: child, // log = App
+          fileName: `${child}.vue`, // log = App.vue
           filePath: path, // log = /Users/chrispark/MultiComponentVue/src/App.vue
           fileDirname: fileDirname, // log = /Users/chrispark/MultiComponentVue/src
           importPath: '/',
           parentList: [],
+          children: [],
           props: {
             oneWay: [],
             twoWay: []
           },
           allVariables: [],
           error: ''
-        });
+        };
+        curr.children.push(childNode);
+        queue.push(childNode);
       });
-      finalAST.push(curr)
 		}
-    console.log('finalAST consolelog: ',finalAST);
-		return finalAST;
+    const traverseTest = vueCompiler.traverseNode(root);
+    console.log('testing traverseNode on root: ', traverseTest);
   };
 
   public getTree(): Tree{
@@ -110,5 +121,17 @@ export class Parser {
     const arrOfChildren = vueCompiler.compileTemplate({ source: sourceCode, filename, id }).ast.components;
     return arrOfChildren;
   }
+  // private getScriptVariables(scriptAst: babelParser.ParseResult<File>): string[]{
+  //     const vars = [];
+  //     traverse(scriptAst, {
+  //       VariableDeclarator(path) {
+  //         if (path.node.id.type === 'Identifier') {
+  //           const varName = path.node.id.name;
+  //           vars.push(varName);
+  //         }
+  //       },
+  //     });
+  //     return vars;
+  //   }
   
 }

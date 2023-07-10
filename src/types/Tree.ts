@@ -5,6 +5,7 @@ export type Tree = {
   filePath: string;
   fileDirname: string;
   importPath: string;
+  children: {}[];
   parentList: string[];
   props: {
     oneWay: string[];
