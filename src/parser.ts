@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { Tree, ChildNode } from './types/Tree';
+import { Tree } from './types/Tree';
 import { getNonce } from './getNonce';
 import * as babelParser from '@babel/parser';
 import * as fs from 'fs';
@@ -13,10 +13,15 @@ const traverse = require('@babel/traverse').default;
 // import { parse }from '@vue/compiler-sfc';
 // import { compile } from 'vue-template-compiler';
 
+// ----FILE PATH OF TEST PROJECT ----
+  // ROOT: /Users/chrispark/MultiComponentVue/src/App.vue
+    // CHILD 1: /Users/chrispark/MultiComponentVue/src/components1/HelloWorld.vue
+    // CHILD 2: /Users/chrispark/MultiComponentVue/src/components1/TheWelcome.vue
+      // CHILD OF CHILD 2: /Users/chrispark/MultiComponentVue/src/components1/WelcomeItem.vue
+
 export class Parser {
   entryFile: string;
   tree: Tree | undefined;
-
   constructor(filePath: string) {
     // mac
     this.entryFile = filePath;    // conditionals checking if OS is windows
@@ -37,16 +42,12 @@ export class Parser {
 
   public entryFileParse() {
     const root = {
-      id: getNonce(),
+      id: '1',
       name: path.basename(this.entryFile).replace(/\.vue?$/, ''), // log = App
       fileName: path.basename(this.entryFile), // log = App.vue
-      filePath: this.entryFile,
+      filePath: this.entryFile, // log = /Users/chrispark/MultiComponentVue/src/App.vue
+      fileDirname: path.dirname(this.entryFile), ///Users/chrispark/MultiComponentVue/src/
       importPath: '/',
-      expanded: false,
-      depth: 0,
-      count: 1,
-      thirdParty: false,
-      children: [],
       parentList: [],
       props: {
         oneWay: [],
@@ -55,111 +56,59 @@ export class Parser {
       allVariables: [],
       error: ''
     };
-    // console.log('ROOT: ', root);
     this.tree = root;
-    this.parser(root);
+		// store AST that parser function creates (Array of Objects) in AST variable to send to panel.ts 
+    const AST = this.parser(root);
     return this.tree;
   }
 
-  private parser(componentTree: Tree): Tree | undefined {
-    const fileName = this.getFileName(componentTree);
-    // Check to see if there is a file that has been passed in by user
-    if (!fileName) {
-      componentTree.error = 'File not found';
-      return;
-    }
-    if (componentTree.parentList.includes(componentTree.filePath)) {
-      return;
-    }
-    
-    // store source code of rootfile in a variable
-      // may need to convert to string
-    let fileContent: string = fs.readFileSync(path.resolve(componentTree.filePath)).toString();
-    // console.log("result from calling fs.readFileSync method: ", fileContent);
-    const { descriptor } = vueCompiler.parse(fileContent);
-
-    const templateASTtokens = descriptor.template.ast;
-    console.log("Template AST TOKENS: ", templateASTtokens);
-
-    // const scriptSetupASTtokens = descriptor.script.scriptSetupAst;    
-    // console.log("SCRIPTSETUPASTTOKEN :", scriptSetupASTtokens)
-
-    const script = descriptor.scriptSetup.content;
-    // console.log("SCRIPTASTTOKEN :", scriptASTtokens);
-    const scriptAST = babelParser.parse(script, {
-      sourceType: 'module',
-      plugins: ['jsx', 'typescript'],
-    });
-    console.log("scriptAST: ", scriptAST);
-
-    const scriptVariables = this.getScriptVariables(scriptAST);
-    console.log("scriptVariables: ", scriptVariables);
-
-    // push script variables
-    componentTree.allVariables.push(...scriptVariables);
-
-    // run templateCompile method from @vue/compiler-sfc to compile template
-    let template = vueCompiler.compileTemplate({
-      source: fileContent,
-      filename: componentTree.fileName,
-      id: componentTree.id
-    });
-    // console.log("result from calling compileTemplate method: ", template);
-
-    let ast = template.ast;
-    console.log("ast: ", ast);
-    //We need to populate componentTree children array with tree objects for each child
-    componentTree.children.forEach((child) => this.parser(child));
-    
-    return componentTree;
+	// DON'T FORGET TO CHANGE TYPES LATER AFTER TESTING IS DONE
+  private parser(root: Tree): any| undefined {
+    const { fileName, fileDirname } = root;
+		let finalAST: any[] = [];
+    // get the filePath
+    // const fileName = root.fileName; // --> App.vue
+		const queue = [root];
+    let id = root.id;
+		// iterate through tree 
+		while(queue.length !== 0) {
+			let curr: any = queue.shift();
+			let sourceCode: string = fs.readFileSync(path.resolve(curr.filePath)).toString();
+			const arrOfChildren = this.getChildren(sourceCode, fileName, id);
+      // iterate through array of child components and instantiate a new ChildNode class
+      arrOfChildren.forEach((el) => {
+        id = `${+id + 1}`;
+        const path = fileDirname + '/components/' + `${el}.vue`;
+        queue.push({
+          id: id,
+          name: el, // log = App
+          fileName: `${el}.vue`, // log = App.vue
+          filePath: path, // log = /Users/chrispark/MultiComponentVue/src/App.vue
+          fileDirname: fileDirname, // log = /Users/chrispark/MultiComponentVue/src
+          importPath: '/',
+          parentList: [],
+          props: {
+            oneWay: [],
+            twoWay: []
+          },
+          allVariables: [],
+          error: ''
+        });
+      });
+      finalAST.push(curr)
+		}
+    console.log('finalAST consolelog: ',finalAST);
+		return finalAST;
   };
-  
+
   public getTree(): Tree{
     return this.tree!;
   }
 
-  private getScriptVariables(scriptAst: babelParser.ParseResult<File>): string[]{
-    const vars = [];
-    traverse(scriptAst, {
-      VariableDeclarator(path) {
-        if (path.node.id.type === 'Identifier') {
-          const varName = path.node.id.name;
-          vars.push(varName);
-        }
-      },
-    });
-    return vars;
+  // helper function to grab child elements
+  public getChildren(sourceCode: string, filename: string, id: string): any {
+    const arrOfChildren = vueCompiler.compileTemplate({ source: sourceCode, filename, id }).ast.components;
+    return arrOfChildren;
   }
-  
-  private getFileName(componentTree: Tree): string | undefined {
-    const ext = path.extname(componentTree.filePath);
-    let fileName: string | undefined = componentTree.fileName;
-    if (!ext){
-      const fileArray = fs.readdirSync(path.dirname(componentTree.filePath));
-      const regEx = new RegExp(`${componentTree.fileName}.(j|t)sx?$`);
-      fileName = fileArray.find((fileStr) => fileStr.match(regEx));
-      fileName ? (componentTree.filePath += path.extname(fileName)) : null;
-    }
-    return fileName;
-  }
-  
   
 }
-
-
-
-
-
-// const traverse = require('@babel/traverse').default;
-
-// const variables = [];
-
-// traverse(scriptAst, {
-//   VariableDeclarator(path) {
-//     if (path.node.id.type === 'Identifier') {
-//       const variableName = path.node.id.name;
-//       variables.push(variableName);
-//     }
-//   },
-// });
-// console.log(variables);
