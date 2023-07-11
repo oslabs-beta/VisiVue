@@ -76,7 +76,7 @@ export class Parser {
 			const arrOfChildren = this.getChildren(sourceCode, curr.fileName, id); // 1st iteration passing in App.vue --> [HelloWorld, TheWelcome]
       // iterate through array of child components and instantiate a new ChildNode class
       arrOfChildren.forEach((child) => {
-        const twoWays = this.extractTwoWayBoundVariables(sourceCode, child);
+        const arrayOfVariables = this.extractVariables(sourceCode, child);
         id = `${+id + 1}`;
         const path = fileDirname + '/components/' + `${child}.vue`;
         const childNode = {
@@ -95,8 +95,11 @@ export class Parser {
           allVariables: [],
           error: ''
         };
-        twoWays.forEach(el => {
-          childNode.props.twoWay.push(el.exp.content)
+        arrayOfVariables.twoway.forEach(el => {
+          childNode.props.twoWay.push(el.exp.content);
+        });
+        arrayOfVariables.oneway.forEach(el => {
+          childNode.props.oneWay.push(el.exp.content);
         })
         curr.children.push(childNode);
         queue.push(childNode);
@@ -115,8 +118,11 @@ export class Parser {
     return arrOfChildren;
   }
 
-  public extractTwoWayBoundVariables(template: string, component: string): any[] {
-    const variables = [];
+  public extractVariables(template: string, component: string): any {
+    const variables = {
+      oneway: [],
+      twoway: []
+    };
     const ast = parse(template); // Parse the Vue template
     transform(ast, {
       nodeTransforms: [
@@ -124,16 +130,14 @@ export class Parser {
           if (node.hasOwnProperty('tag')) {
             if (node['tag'] === component) {
               console.log("NODE: ", node);
-              if (
-                node.type === 1 && // Element node
-                node.props.some((prop) => prop.type === 7 && prop.name === 'model') // v-model directive
-              ) {
-                const modelDirective = node.props.find((prop) => prop.type === 7 && prop.name === 'model');
-                console.log('MODEL DIRECTIVE: ', modelDirective);
-                variables.push(modelDirective);
+              if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name === 'model')) {
+                const twoWayDirective = node.props.find((prop) => prop.type === 7 && prop.name === 'model');
+                variables.twoway.push(twoWayDirective);
+              } else if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name !== 'model')){
+                const oneWayDirective = node.props.find((prop) => prop.type === 7 && prop.name !== 'model');
+                variables.oneway.push(oneWayDirective);
               }
             }
-            
           }
         }
       ]

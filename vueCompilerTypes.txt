@@ -1,0 +1,7 @@
+type === 1: Represents an element node. These nodes correspond to HTML elements in the template.
+type === 2: Represents a text node. These nodes contain static text or interpolated expressions within double curly braces ({{ }}).
+type === 3: Represents a text node. These nodes contain static text content.
+type === 4: Represents a comment node. These nodes represent HTML comments in the template.
+type === 5: Represents an interpolation node. These nodes contain dynamic expressions within double curly braces ({{ }}).
+type === 6: Represents an attribute node. These nodes contain static attributes like class, id, or other HTML attributes.
+type === 7: Represents a directive node. These nodes correspond to directives like v-bind, v-on, or v-model.
