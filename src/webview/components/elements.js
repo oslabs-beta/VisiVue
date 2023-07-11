@@ -1,168 +1,154 @@
-const tree = {
-  children: [
-    {
-      children: [
-        // {
-        //   children: [],
-        //   count: 1,
-        //   depth: 0,
-        //   error: "",
-        //   expanded: false,
-        //   fileName: "GrandBaby One",
-        //   filePath:
-        //     "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
-        //   id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
-        //   importPath: "/",
-        //   name: "Sidebar",
-        //   parentList: [
-        //     "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
-        //   ],
-        //   props: { propOne: true, propTwo: true },
-        //   reactRouter: false,
-        //   reduxConnect: false,
-        //   thirdParty: false,
-        //   // [[Prototype]]: Object,
-        // },
-      ],
-      count: 1,
-      depth: 0,
-      error: "",
-      expanded: false,
-      fileName: "Child One",
-      filePath:
-        "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
-      id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
-      importPath: "/",
-      name: "Sidebar",
-      parentList: [
-        "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
-      ],
-      props: { propOne: true, propTwo: true },
-      reactRouter: false,
-      reduxConnect: false,
-      thirdParty: false,
-      // [[Prototype]]: Object,
-    },
-    {
-      children: [
-        {
-          children: [
-            // {
-            //   children: [],
-            //   count: 1,
-            //   depth: 0,
-            //   error: "",
-            //   expanded: false,
-            //   fileName: "Great G-Baby One",
-            //   filePath:
-            //     "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
-            //   id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
-            //   importPath: "/",
-            //   name: "Sidebar",
-            //   parentList: [
-            //     "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
-            //   ],
-            //   props: { propOne: true, propTwo: true },
-            //   reactRouter: false,
-            //   reduxConnect: false,
-            //   thirdParty: false,
-            //   // [[Prototype]]: Object,
-            // },
-          ],
-          count: 1,
-          depth: 0,
-          error: "",
-          expanded: false,
-          fileName: "GrandBaby Two",
-          filePath:
-            "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
-          id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
-          importPath: "/",
-          name: "Sidebar",
-          parentList: [
-            "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
-          ],
-          props: { propOne: true, propTwo: true },
-          reactRouter: false,
-          reduxConnect: false,
-          thirdParty: false,
-          // [[Prototype]]: Object,
-        },
-        {
-          children: [],
-          count: 1,
-          depth: 0,
-          error: "",
-          expanded: false,
-          fileName: "GrandBaby Three",
-          filePath:
-            "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
-          id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
-          importPath: "/",
-          name: "Sidebar",
-          parentList: [
-            "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
-          ],
-          props: { propOne: true, propTwo: true },
-          reactRouter: false,
-          reduxConnect: false,
-          thirdParty: false,
-          // [[Prototype]]: Object,
-        },
-      ],
-      count: 1,
-      depth: 0,
-      error: "",
-      expanded: false,
-      fileName: "Child Two",
-      filePath:
-        "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
-      id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
-      importPath: "/",
-      name: "Sidebar",
-      parentList: [
-        "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
-      ],
-      props: { propOne: true, propTwo: true },
-      reactRouter: false,
-      reduxConnect: false,
-      thirdParty: false,
-      // [[Prototype]]: Object,
-    },
-    {
-      children: [],
-      count: 1,
-      depth: 0,
-      error: "",
-      expanded: false,
-      fileName: "Child Three",
-      filePath:
-        "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
-      id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
-      importPath: "/",
-      name: "Sidebar",
-      parentList: [
-        "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
-      ],
-      props: { propOne: true, propTwo: true },
-      reactRouter: false,
-      reduxConnect: false,
-      thirdParty: false,
-      // [[Prototype]]: Object,
-    },
-  ],
+// import node from './NodeTemplate';
+
+export const tree = {
+  children: [{
+    children: [
+      {
+        children: [
+          {
+            children: [],
+            count: 1,
+            depth: 0,
+            error: "",
+            expanded: false,
+            fileName: "GrandBaby One-A",
+            filePath:
+              "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
+            id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
+            importPath: "/",
+            name: "Sidebar",
+            parentList: [
+              "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
+            ],
+            oneWayProps: ['p-1'],
+            twoWayProps: [],
+            reactRouter: false,
+            reduxConnect: false,
+            thirdParty: false,
+            // [[Prototype]]: Object,
+          },
+          {
+            children: [
+              {
+                children: [],
+                count: 1,
+                depth: 0,
+                error: "",
+                expanded: false,
+                fileName: "G-G-Baby 1",
+                filePath:
+                  "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
+                id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
+                importPath: "/",
+                name: "Sidebar",
+                parentList: [
+                  "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
+                ],
+                oneWayProps: ['p-3'],
+                twoWayProps: [],
+                reactRouter: false,
+                reduxConnect: false,
+                thirdParty: false,
+                // [[Prototype]]: Object,
+              },
+            ],
+            count: 1,
+            depth: 0,
+            error: "",
+            expanded: false,
+            fileName: "GrandBaby One-B",
+            filePath:
+              "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
+            id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
+            importPath: "/",
+            name: "Sidebar",
+            parentList: [
+              "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
+            ],
+            oneWayProps: ['p-3'],
+            twoWayProps: ['p-2'],
+            reactRouter: false,
+            reduxConnect: false,
+            thirdParty: false,
+            // [[Prototype]]: Object,
+          },
+        ],
+        count: 1,
+        depth: 0,
+        error: "",
+        expanded: false,
+        fileName: "Child One",
+        filePath:
+          "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
+        id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
+        importPath: "/",
+        name: "Sidebar",
+        parentList: [
+          "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
+        ],
+        oneWayProps: ['p-1'],
+        twoWayProps: ['p-2'],
+        reactRouter: false,
+        reduxConnect: false,
+        thirdParty: false,
+        // [[Prototype]]: Object,
+      },
+      {
+        children: [],
+        count: 1,
+        depth: 0,
+        error: "",
+        expanded: false,
+        fileName: "Child Two",
+        filePath:
+          "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
+        id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
+        importPath: "/",
+        name: "Sidebar",
+        parentList: [
+          "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
+        ],
+        oneWayProps: [],
+        twoWayProps: [],
+        reactRouter: false,
+        reduxConnect: false,
+        thirdParty: false,
+        // [[Prototype]]: Object,
+      },
+    ],
+    count: 1,
+    depth: 0,
+    error: "",
+    expanded: false,
+    fileName: "Parent",
+    filePath:
+      "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
+    id: "twJWgoTMrb7UkXQI8tC1iGPX9VpfK50I",
+    importPath: "/",
+    name: "index",
+    parentList: [],
+    oneWayProps: [],
+    twoWayProps: [],
+    reactRouter: false,
+    reduxConnect: false,
+    thirdParty: false,
+    // [[Prototype]]: Object,
+  }],
   count: 1,
   depth: 0,
   error: "",
   expanded: false,
-  fileName: "index.tsx",
+  fileName: "Index.tsx",
   filePath:
-    "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
-  id: "twJWgoTMrb7UkXQI8tC1iGPX9VpfK50I",
+    "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
+  id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
   importPath: "/",
-  name: "index",
-  parentList: [],
-  props: {},
+  name: "Sidebar",
+  parentList: [
+    "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
+  ],
+  oneWayProps: [],
+  twoWayProps: [],
   reactRouter: false,
   reduxConnect: false,
   thirdParty: false,
@@ -171,13 +157,18 @@ const tree = {
 
 export const initialElements = [];
 
+// const customNode = new NewNode('0', 'custom', '', {x:0,y:-150}, '', {oneway: 'Variable One', twoway: 'Variable Two'});
+// initialElements.push(customNode);
+// console.log(initialElements);
+
 // create a node constructor func:
-function NewNode(id, type, label, position, parentId) {
+function NewNode(id, type, label, position, parentId, data) {
   this.id = id;
   this.type = type;
   this.label = label;
   this.position = position;
   this.parentId = parentId;
+  this.data = data;
   this.class = "light";
 }
 // create an edge constructor func:
@@ -210,6 +201,7 @@ function createNodesAndEdges(tree) {
     if (!node.children.length) {
       type = "output";
     }
+    // if the current node in the AST has a parentId property, assign it to 'parentId'
     if (node.parentId) {
       parentId = node.parentId;
     }
@@ -220,30 +212,33 @@ function createNodesAndEdges(tree) {
     nodeId += 1;
     // console.log(initialElements);
 
-    // push new values to x and y arrays for each child element of the current node:
+    // If the current node has children, push its children to the 'q' and create x and y postions for each child and push them to 'xQ' and 'yQ' respectively
     if (node.children.length) {
       // push all child nodes to 'q'
       q.push(...node.children);
 
-      // create new x and y coordinates for child nodes and push to respective arrays:
-      let nodeWidth = 200; // horizontal space between sibling nodes
-      let nodeDepth = 150; // vertical space between parent/child nodes
-      let newXPos = -((node.children.length * nodeWidth) / 2 - nodeWidth / 2);
+      // intialize variable to calculate x and y positions:
+      let horizontalSpace = 200; // horizontal space between sibling nodes
+      let verticalSpace = 150; // vertical space between parent/child nodes
+      let newXPos = -((node.children.length * horizontalSpace) / 2 - horizontalSpace / 2);
       console.log(newXPos);
 
+      // create new x and y positions for each child node and push to respective arrays:
       for (let i = 0; i < node.children.length; i++) {
         x.push(newNode.position.x + newXPos);
-        newXPos += nodeWidth;
-        y.push(newNode.position.y + nodeDepth);
-        // add a 'parentId' to the children of 'tree'
+        newXPos += horizontalSpace;
+        y.push(newNode.position.y + verticalSpace);
+
+        // add a 'parentId' to all children of the current node in the AST:
         node.children[i].parentId = newNode.id;
       }
     }
 
+    // Instantiate a new edge object and push to 'initialElements' array
     if (newNode.parentId) {
       const id = `e${newNode.parentId}-${newNode.id}`;
-      console.log(id);
       const newEdge = new NewEdge(id, `${newNode.parentId}`, `${newNode.id}`);
+
       initialElements.push(newEdge);
     }
     // console.log("Initial Elements:", initialElements);
@@ -257,3 +252,6 @@ function createNodesAndEdges(tree) {
 createNodesAndEdges(tree);
 
 // TO DO: FIX NODES RENDERING ON TOP OF EACH OTHER (GRANDBABY ONE AND TWO)!!!!!!!!!!!!!!!!
+// the number of child nodes must trigger a re-assignment of parent sibling nodes - this means they should not be held in a queue but probably an object?  How do I do this without lots of iterating?????
+
+// Can create a horizontal button!!!
