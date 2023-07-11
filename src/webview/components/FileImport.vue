@@ -1,7 +1,6 @@
 <template>
-  <div id="file-import" >
-    <label for="file-input" id="file-input-label">
-      Select File
+    <label class="btn btn-xs btn-primary">
+      <input type="file" name="attachment[]" id="fileId" @change="handleFileUpload" multiple/>
     </label>
     <input id="file-input" type="file" @change="handleFileUpload">
     <!-- <div >{{ string }}</div> -->
@@ -10,23 +9,25 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-const string = ref('statar')
+  import { ref } from 'vue';
+  // note that state using ref are objects so u have to access the value prop to get the value
+  let string = ref('statar')
 
-const vscode = acquireVsCodeApi();
+  const vscode = acquireVsCodeApi();
+  
+	function handleFileUpload(event) {
+    event.preventDefault();
+    const filePath = event.target.files[0].path;
+    event.target.value = null;
+    string.value = filePath;
+    if (filePath) {
+      vscode.postMessage({
+        type: "onFile",
+        value: filePath
+      });
+		}
+	}
 
-function handleFileUpload(event) {
-  event.preventDefault();
-  const filePath = event.target.files[0].path;
-  event.target.value = null;
-  string.value = filePath;
-  if (filePath) {
-    vscode.postMessage({
-      type: "onFile",
-      value: filePath
-    });
-  }
-}
  
 </script>
 

@@ -53,7 +53,6 @@ export default class Panel {
     //Listen for when the panel gets disposed
     //disposed - when the user closes the panel or when closed programatically (thru code)
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-    console.log("Panel is Created");
     // VSCode API Native Method: onDidReceiveMessage() = event that fires when webview content posts a message
     // Webview content can only post strings of json serializable objects back to our extension
     this._panel.webview.onDidReceiveMessage(
@@ -61,8 +60,9 @@ export default class Panel {
         switch (msg.type) {
           case 'onFile':
             if (msg.value){
+              // connects us to parser file
               this.parser = new Parser(msg.value);
-              this.parser.parse();
+              this.parser.entryFileParse();
               this.updateView();
             }
             break;
@@ -84,18 +84,12 @@ export default class Panel {
   private async updateView() {
     // Saves current state of the tree to the workspace state
     const tree = this.parser!.getTree();
+    console.log('AST TREE: ', tree);
     this._context.workspaceState.update('sVueTree', tree);
     this._panel.webview.postMessage({
       type: 'parsed-data',
       value: tree,
       settings: await vscode.workspace.getConfiguration('sVueTree')
-    });
-    
-    // Sends the updated tree to webview
-    this._panel.webview.postMessage({
-      type: 'parsed-data',
-      value: tree,
-      settings: await vscode.workspace.getConfiguration('sVueTree'),
     });
   }
   
