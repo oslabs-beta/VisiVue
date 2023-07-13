@@ -229,7 +229,7 @@ function createNodesAndEdges(tree) {
         newXPos += horizontalSpace;
         y.push(newNode.position.y + verticalSpace);
 
-        // add a 'parentId' to all children of the current node in the AST:
+        // add a 'parentId' to all children of the current node 5in the AST:
         node.children[i].parentId = newNode.id;
       }
     }
