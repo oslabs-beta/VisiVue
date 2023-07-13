@@ -1,24 +1,58 @@
 <script setup>
   import { Handle, Position } from '@vue-flow/core'
-  // somehow I need to get access to stateful variables and dynamically create p tags for each one.  See CustomNode.vue and presets.js at https://vueflow.dev/examples/nodes/ 'Custom Node'
 
-  // I think the flow of data goes: presets.js --> CustomNode.vue --> App.vue
+  const props = defineProps({
+    data: {
+      type: Object,
+    },
+    oneway: {
+      type: Array,
+    },
+    twoway: {
+      type: Array,
+    },
+    label: {
+      type: String,
+    }
+  })
+
+  const c = JSON.stringify(props);
+  console.log('NodeTemplate: props.node:', c);
 
 </script>
 
 <template>
-  <div>Custom Node</div>
+  <div style="padding-top: .5rem;">{{ label }}</div>
 
   <div
     style="display: flex; flex-direction: row; align-self: center; justify-content: center; max-width: 90%; margin: auto; gap: 3px"
   >
 
-    <template >
-      <p title="Variable" type="text"></p>
+    <template v-for="vars of oneway" >
+      <div class="oneway">
+        <p type="text">{{ vars }}</p>
+      </div>
+    </template>
+
+    <template v-for="vars of twoway" >
+      <div class="twoway">
+        <p type="text">{{ vars }}</p>
+      </div>
     </template>
   </div>
 
-  <Handle id="a" type="source" :position="Position.Top" />
+  <Handle id="a" type="target" :position="Position.Top" />
 
   <Handle id="b" type="source" :position="Position.Bottom" />
 </template>
+
+<style>
+.oneway {
+  font-size: .7rem;
+  color: rgb(152, 0, 0);
+}
+.twoway {
+  font-size: .7rem;
+  color: rgb(3, 0, 152);
+}
+</style>
