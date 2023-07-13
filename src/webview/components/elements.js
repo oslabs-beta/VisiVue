@@ -157,7 +157,7 @@ export const tree = {
 
 export const initialElements = [];
 
-// const customNode = new NewNode('0', 'custom', '', {x:0,y:-150}, '', {oneway: 'Variable One', twoway: 'Variable Two'});
+// export const customNode = new NewNode('0', 'custom', '', {x:0,y:-150}, '', {oneway: 'Variable One', twoway: 'Variable Two'});
 // initialElements.push(customNode);
 // console.log(initialElements);
 

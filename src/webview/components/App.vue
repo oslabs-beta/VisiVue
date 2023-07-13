@@ -106,6 +106,10 @@ function toggleClass() {
     :min-zoom="0.2"
     :max-zoom="4"
   >
+    <!-- <template>
+      <Node />
+    </template> -->
+      
 
     <Background :pattern-color="dark ? '#FFFFFB' : '#134c84'" :variant="true" />
 
