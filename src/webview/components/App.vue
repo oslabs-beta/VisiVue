@@ -13,6 +13,7 @@ import { ref } from "vue";
 // import { initialElements } from "./initial-elements";
 import { initialElements } from "./elements";
 import Node from "./NodeTemplate";
+import FileImport from './FileImport'
 
 /**
  * useVueFlow provides all event handlers and store properties
@@ -98,6 +99,8 @@ function toggleClass() {
 </script>
 
 <template>
+  <FileImport />
+
   <VueFlow
     v-model="elements"
     :class="{ dark }"
@@ -194,10 +197,19 @@ body,
 #app {
   margin: 0;
   height: 100%;
-  background: #272727;
+  background: #FBFAF5;
 }
-
-
+.fileImport {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+.fileInput {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  color: black;
+}
 
 #app {
   text-transform: uppercase;
@@ -205,19 +217,21 @@ body,
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: rgba(255, 255, 255, 0.2);
+  color: rgb(221, 222, 215);
+  
 }
 
 .vue-flow__minimap {
   transform: scale(75%);
   transform-origin: bottom right;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
 .basicflow .vue-flow__node {
-  background: #646464;
-  color: #414141;
-  border: 1px solid rgb(191, 99, 252);
-  box-shadow: 0 .15rem .2rem .4rem rgba(252, 99, 232, 0.2)
+  background: rgba(16,185,129);
+  color: black;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;    /* box-shadow: 0 .15rem .2rem .4rem rgba(252, 99, 232, 0.2) */
+  border: 2px solid rgb(13, 163, 113);
 }
 
 .basicflow.dark {
