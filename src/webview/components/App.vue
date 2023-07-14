@@ -11,9 +11,137 @@ import { Controls } from "@vue-flow/controls";
 import { MiniMap } from "@vue-flow/minimap";
 import { ref } from "vue";
 // import { initialElements } from "./initial-elements";
-import { initialElements } from "./elements";
+import { tree } from "./elements";
 import Node from "./NodeTemplate";
-import FileImport from './FileImport'
+import FileImport from "./FileImport"
+
+// create a node constructor func:
+function NewNode(id, type, label, position, parentId, data) {
+  this.id = id;
+  this.type = type;
+  this.label = label;
+  this.position = position;
+  this.parentId = parentId;
+  this.data = data;
+  this.class = "light";
+}
+// create an edge constructor func:
+function NewEdge(id, source, target) {
+  this.id = id;
+  // this.type = 'smoothstep';
+  this.label;
+  this.source = source;
+  this.target = target;
+  // this.color = '#E83015'; // maybe style this instead??? Or research how to change edge color????
+}
+
+// Create instances of nodes and edges and push to 'initialElements':
+function createNodesAndEdges(tree) {
+  // console.log(tree);
+  const initialElements = [];
+
+  const q = [tree];
+  let nodeId = 1;
+  let x = [0]; // []
+  let y = [0]; // []
+
+  while (q.length) {
+    // initialize variables and save to respective values:
+    const node = q.shift();
+    // let type = "";
+    let type = "template";
+    let newPos = { x: x.shift(), y: y.shift() }; // {x: 250, y: 0}
+    let parentId = "";
+
+    // Add oneway and twoway props from AST to 'data' to be passed into a new instance of NewNode:
+    const oneway = node.props.oneWay;
+    const twoway = node.props.twoWay;
+    const data = {oneway, twoway};
+    // data.oneway.push('');
+    // data.twoway.push('');
+
+    // const d = JSON.stringify(data);
+    // console.log('Data: ',d);
+
+    const data1 = {};
+    
+
+    // change 'type' property based on if the node is a root node or leaf node:
+    if (!initialElements.length) {
+      type = "input";
+    }
+    // if (!node.children.length) {
+    //   type = "output";
+    // }
+
+    // if the current node in the AST has a parentId property, assign it to 'parentId'
+    if (node.parentId) {
+      parentId = node.parentId;
+    }
+    
+
+    // instantiate a new node and push to 'initialElements' array:
+    const newNode = new NewNode(nodeId, type, node.fileName, newPos, parentId, data);
+    initialElements.push(newNode);
+    nodeId += 1;
+    // console.log(initialElements);
+
+    // If the current node has children, push its children to the 'q' and create x and y postions for each child and push them to 'xQ' and 'yQ' respectively
+    if (node.children.length) {
+      // push all child nodes to 'q'
+      q.push(...node.children);
+
+      // intialize variable to calculate x and y positions:
+      let horizontalSpace = 200; // horizontal space between sibling nodes
+      let verticalSpace = 150; // vertical space between parent/child nodes
+      let newXPos = -((node.children.length * horizontalSpace) / 2 - horizontalSpace / 2);
+      // console.log(newXPos);
+
+      // create new x and y positions for each child node and push to respective arrays:
+      for (let i = 0; i < node.children.length; i++) {
+        x.push(newNode.position.x + newXPos);
+        newXPos += horizontalSpace;
+        y.push(newNode.position.y + verticalSpace);
+
+        // add a 'parentId' to all children of the current node in the AST:
+        node.children[i].parentId = newNode.id;
+      }
+    }
+
+    // Instantiate a new edge object and push to 'initialElements' array
+    if (newNode.parentId) {
+      const id = `e${newNode.parentId}-${newNode.id}`;
+      const newEdge = new NewEdge(id, `${newNode.parentId}`, `${newNode.id}`);
+
+      initialElements.push(newEdge);
+    }
+    // console.log("Initial Elements:", initialElements);
+    // nodeQ = [rootNode, child1, child2a, child2b];
+    // xQ = [250, 250, 150, 350];
+    // yQ = [0, 100, 200, 200];
+  }
+  return initialElements;
+}
+ 
+
+let parsed = ref('this is where parsed data should be')
+let parsedHC = ref('this is where hardcoded data should be')
+const elements = ref([]);
+
+let parsedTree;
+
+window.addEventListener('message', async (event) => {
+  const message = await event.data;
+  if (message.type === 'parsed-data') {
+    parsedHC.value = tree;
+    parsedTree = message.value;
+  }
+  const initialElements = createNodesAndEdges(parsedTree);
+  parsed.value = initialElements;
+  elements.value = initialElements;
+});
+
+// Need to call 'createNodesAndEdges' inside of an event listener for a post message carrying AST data from panel.ts
 
 /**
  * useVueFlow provides all event handlers and store properties
@@ -31,7 +159,7 @@ const {
 /**
  * Our elements
  */
-const elements = ref(initialElements); //  imports array of nodes and edges and stores to state (at 'elements.value')
+// const elements = ref(initialElements); //  imports array of nodes and edges and stores to state (at 'elements.value')
 
 /**
  * This is a Vue Flow event-hook which can be listened to from anywhere you call the composable, instead of only on the main component
@@ -100,6 +228,8 @@ function toggleClass() {
 
 <template>
   <FileImport />
+  <div style="color: #000;">{{ parsed }}</div>
+  <!-- <div style="color: red;">{{ parsedHC }}</div> -->
 
   <VueFlow
     v-model="elements"
@@ -113,6 +243,10 @@ function toggleClass() {
       <Node />
     </template> -->
       
+
+    <template #node-template="{ data, label }">
+      <Node :data="data" :oneway="data.oneway" :twoway="data.twoway" :label="label"/>
+    </template>
 
     <Background :pattern-color="dark ? '#FFFFFB' : '#134c84'" :variant="true" />
 
@@ -181,6 +315,7 @@ function toggleClass() {
           />
         </svg>
       </button>
+      
     </Panel>
   </VueFlow>
 </template>
@@ -232,6 +367,9 @@ body,
   color: black;
   box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;    /* box-shadow: 0 .15rem .2rem .4rem rgba(252, 99, 232, 0.2) */
   border: 2px solid rgb(13, 163, 113);
+  min-width: 10rem;
+  min-height: 3rem;
+  border-radius: .3rem;
 }
 
 .basicflow.dark {
@@ -259,7 +397,7 @@ body,
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
+  gap: 8;
 }
 .basicflow .controls button {
   padding: 4px;

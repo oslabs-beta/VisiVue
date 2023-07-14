@@ -1,10 +1,9 @@
 <template>
-    <label class="btn btn-xs btn-primary">
-      <input type="file" name="attachment[]" id="fileId" @change="handleFileUpload" multiple/>
-    </label>
-    <input id="file-input" type="file" @change="handleFileUpload">
-    <!-- <div >{{ string }}</div> -->
-  </div>
+  <label class="btn btn-xs btn-primary">
+    <input type="file" name="attachment[]" id="fileId" @change="handleFileUpload" multiple/>
+  </label>
+  <input id="file-input" type="file" @change="handleFileUpload">
+  <!-- <div >{{ string }}</div> -->
   <div>{{ string }}</div>
 </template>
 
@@ -28,7 +27,6 @@
 		}
 	}
 
- 
 </script>
 
 <style>
