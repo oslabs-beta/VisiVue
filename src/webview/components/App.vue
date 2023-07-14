@@ -15,10 +15,6 @@ import { tree } from "./elements";
 import Node from "./NodeTemplate";
 import FileImport from "./FileImport"
 
-
-
-const initialElements = [];
-
 // create a node constructor func:
 function NewNode(id, type, label, position, parentId, data) {
   this.id = id;
@@ -42,6 +38,8 @@ function NewEdge(id, source, target) {
 // Create instances of nodes and edges and push to 'initialElements':
 function createNodesAndEdges(tree) {
   // console.log(tree);
+  const initialElements = [];
+
   const q = [tree];
   let nodeId = 1;
   let x = [0]; // []
@@ -56,8 +54,8 @@ function createNodesAndEdges(tree) {
     let parentId = "";
 
     // Add oneway and twoway props from AST to 'data' to be passed into a new instance of NewNode:
-    const oneway = node.oneWayProps;
-    const twoway = node.twoWayProps;
+    const oneway = node.props.oneWay;
+    const twoway = node.props.twoWay;
     const data = {oneway, twoway};
     // data.oneway.push('');
     // data.twoway.push('');
@@ -122,11 +120,28 @@ function createNodesAndEdges(tree) {
     // xQ = [250, 250, 150, 350];
     // yQ = [0, 100, 200, 200];
   }
+  return initialElements;
 }
  
-// Need to call 'createNodesAndEdges' inside of an event listener for a post message carrying AST data from panel.ts
-createNodesAndEdges(tree);
 
+let parsed = ref('this is where parsed data should be')
+let parsedHC = ref('this is where hardcoded data should be')
+const elements = ref([]);
+
+let parsedTree;
+
+window.addEventListener('message', async (event) => {
+  const message = await event.data;
+  if (message.type === 'parsed-data') {
+    parsedHC.value = tree;
+    parsedTree = message.value;
+  }
+  const initialElements = createNodesAndEdges(parsedTree);
+  parsed.value = initialElements;
+  elements.value = initialElements;
+});
+
+// Need to call 'createNodesAndEdges' inside of an event listener for a post message carrying AST data from panel.ts
 
 /**
  * useVueFlow provides all event handlers and store properties
@@ -144,7 +159,7 @@ const {
 /**
  * Our elements
  */
-const elements = ref(initialElements); //  imports array of nodes and edges and stores to state (at 'elements.value')
+// const elements = ref(initialElements); //  imports array of nodes and edges and stores to state (at 'elements.value')
 
 /**
  * This is a Vue Flow event-hook which can be listened to from anywhere you call the composable, instead of only on the main component
@@ -213,6 +228,8 @@ function toggleClass() {
 
 <template>
   <FileImport />
+  <div style="color: #000;">{{ parsed }}</div>
+  <!-- <div style="color: red;">{{ parsedHC }}</div> -->
 
   <VueFlow
     v-model="elements"
@@ -232,8 +249,6 @@ function toggleClass() {
     <MiniMap />
 
     <Controls />
-
-    <FileImport />
 
     <Panel :position="PanelPosition.TopRight" class="controls">
       <button

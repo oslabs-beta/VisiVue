@@ -20,8 +20,10 @@ export const tree = {
             parentList: [
               "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
             ],
-            oneWayProps: ['p-1'],
-            twoWayProps: [],
+            props: {
+              oneWay: [],
+              twoWay: [],
+            },
             reactRouter: false,
             reduxConnect: false,
             thirdParty: false,
@@ -44,8 +46,10 @@ export const tree = {
                 parentList: [
                   "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
                 ],
-                oneWayProps: ['p-3'],
-                twoWayProps: [],
+                props: {
+                  oneWay: ['p-3'],
+                  twoWay: [],
+                },
                 reactRouter: false,
                 reduxConnect: false,
                 thirdParty: false,
@@ -65,8 +69,10 @@ export const tree = {
             parentList: [
               "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
             ],
-            oneWayProps: ['p-3'],
-            twoWayProps: ['p-2'],
+            props: {
+              oneWay: ['p-3'],
+              twoWay: ['p-2'],
+            },
             reactRouter: false,
             reduxConnect: false,
             thirdParty: false,
@@ -86,8 +92,10 @@ export const tree = {
         parentList: [
           "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
         ],
-        oneWayProps: ['p-1'],
-        twoWayProps: ['p-2'],
+        props: {
+          oneWay: ['p-1'],
+          twoWay: ['p-2'],
+        },
         reactRouter: false,
         reduxConnect: false,
         thirdParty: false,
@@ -108,8 +116,10 @@ export const tree = {
         parentList: [
           "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
         ],
-        oneWayProps: [],
-        twoWayProps: [],
+        props: {
+          oneWay: [],
+          twoWay: [],
+        },
         reactRouter: false,
         reduxConnect: false,
         thirdParty: false,
@@ -127,8 +137,10 @@ export const tree = {
     importPath: "/",
     name: "index",
     parentList: [],
-    oneWayProps: [],
-    twoWayProps: [],
+    props: {
+      oneWay: [],
+      twoWay: [],
+    },
     reactRouter: false,
     reduxConnect: false,
     thirdParty: false,
@@ -147,8 +159,10 @@ export const tree = {
   parentList: [
     "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
   ],
-  oneWayProps: [],
-  twoWayProps: [],
+  props: {
+    oneWay: [],
+    twoWay: [],
+  },
   reactRouter: false,
   reduxConnect: false,
   thirdParty: false,
