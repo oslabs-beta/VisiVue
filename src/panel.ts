@@ -84,7 +84,7 @@ export default class Panel {
   private async updateView() {
     // Saves current state of the tree to the workspace state
     const tree = this.parser!.getTree();
-    // console.log('AST TREE: ', tree);
+    console.log('AST TREE: ', tree);
     this._context.workspaceState.update('sVueTree', tree);
     this._panel.webview.postMessage({
       type: 'parsed-data',
