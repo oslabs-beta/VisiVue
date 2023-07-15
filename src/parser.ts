@@ -62,7 +62,6 @@ export class Parser {
 
 	// DON'T FORGET TO CHANGE TYPES LATER AFTER TESTING IS DONE
   private parser(root: Tree): void {
-    console.log('root before iteration', root)
     const { fileName, fileDirname } = root;
     // get the filePath
 		const queue = [root];
@@ -72,8 +71,10 @@ export class Parser {
 			let curr: any = queue.shift();
       
 			let sourceCode: string = fs.readFileSync(path.resolve(curr.filePath)).toString(); 
-
+      
 			const arrOfChildren = this.getChildren(sourceCode, curr.fileName, id); // 1st iteration passing in App.vue --> [HelloWorld, TheWelcome]
+      this.getImports(sourceCode, id)
+
       // iterate through array of child components and instantiate a new ChildNode class
       arrOfChildren.forEach((child) => {
         const arrayOfVariables = this.extractVariables(sourceCode, child);
@@ -117,7 +118,8 @@ export class Parser {
     const arrOfChildren = vueCompiler.compileTemplate({ source: sourceCode, filename, id }).ast.components;
     return arrOfChildren;
   }
-
+  // helper function to extract variables when iterating through the components
+  // parse is imported from @vue/compiler-dom
   public extractVariables(template: string, component: string): any {
     const variables = {
       oneway: [],
@@ -129,7 +131,6 @@ export class Parser {
         (node) => {
           if (node.hasOwnProperty('tag')) {
             if (node['tag'] === component) {
-              console.log("NODE: ", node);
               if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name === 'model')) {
                 const twoWayDirective = node.props.find((prop) => prop.type === 7 && prop.name === 'model');
                 variables.twoway.push(twoWayDirective);
@@ -144,22 +145,17 @@ export class Parser {
     });
     return variables;
   }
+  // call parse method from vueCompiler on current component. It will return an object of type SFCParseResult
+  // store result in a variable and access descriptor property. 
+  // We will then use this to pass into SFC compileScript as the first argument
+  // second arg is options which only requires id
+  // this will return an object of type SFCScriptBlock
+  // store what is returned in a variable and then access the imports property
+  public getImports(template: string, id: string): any {
+    const { descriptor } = vueCompiler.parse(template); // return object type SFCParseResult with descriptor property
+    const { imports } = vueCompiler.compileScript(descriptor, {id}); // return object type SFCScriptBlock with imports property
+    Object.values(imports).forEach(x => {
+      console.log(x.source)
+    })
+  }
 }
-    // console.log('root after iteration', root);
-    // const context = createTransformContext(root, {});
-    // console.log('context from createTransformContext func', context);
-    // const traverseTest = traverseNode(root, context);
-    // console.log('testing traverseNode on root: ', traverseTest);
-
-  // private getScriptVariables(scriptAst: babelParser.ParseResult<File>): string[]{
-  //     const vars = [];
-  //     traverse(scriptAst, {
-  //       VariableDeclarator(path) {
-  //         if (path.node.id.type === 'Identifier') {
-  //           const varName = path.node.id.name;
-  //           vars.push(varName);
-  //         }
-  //       },
-  //     });
-  //     return vars;
-  //   }
