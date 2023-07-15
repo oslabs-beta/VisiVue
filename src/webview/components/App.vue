@@ -10,10 +10,9 @@ import { Background } from "@vue-flow/background";
 import { Controls } from "@vue-flow/controls";
 import { MiniMap } from "@vue-flow/minimap";
 import { ref } from "vue";
-// import { initialElements } from "./initial-elements";
-import { tree } from "./elements";
 import Node from "./NodeTemplate";
 import FileImport from "./FileImport"
+import { tree } from "./elements";
 
 // create a node constructor func:
 function NewNode(id, type, label, position, parentId, data) {
@@ -26,13 +25,13 @@ function NewNode(id, type, label, position, parentId, data) {
   this.class = "light";
 }
 // create an edge constructor func:
-function NewEdge(id, source, target) {
+function NewEdge(id, source, target, style, animated) {
   this.id = id;
-  // this.type = 'smoothstep';
   this.label;
   this.source = source;
   this.target = target;
-  // this.color = '#E83015'; // maybe style this instead??? Or research how to change edge color????
+  this.style = style;
+  this.animated = animated;
 }
 
 // Create instances of nodes and edges and push to 'initialElements':
@@ -111,8 +110,24 @@ function createNodesAndEdges(tree) {
     // Instantiate a new edge object and push to 'initialElements' array
     if (newNode.parentId) {
       const id = `e${newNode.parentId}-${newNode.id}`;
-      const newEdge = new NewEdge(id, `${newNode.parentId}`, `${newNode.id}`);
+      
+      // assign edge width and animation based on stateful variables:
+      let animated = false;
+      let strokeWidth;
+      if (newNode.data.oneway.length || newNode.data.twoway.length) {
+        animated = true;
+        strokeWidth = '4px';
+      }  
 
+      // assign edge color based on stateful variables:
+      let color;
+      if (newNode.data.oneway.length && newNode.data.twoway.length) color = '#A219FF';
+      else if (newNode.data.oneway.length) color = 'rgb(255, 72, 72)';
+      else if (newNode.data.twoway.length) color = 'rgb(0, 102, 255)';
+      const style = { stroke: `${color}`, strokeWidth: `${strokeWidth}` };
+
+      // instantiate a new edge and push to 'initialElements'
+      const newEdge = new NewEdge(id, `${newNode.parentId}`, `${newNode.id}`, style, animated);
       initialElements.push(newEdge);
     }
     // console.log("Initial Elements:", initialElements);
@@ -124,24 +139,29 @@ function createNodesAndEdges(tree) {
 }
  
 
+// uncomment to get AST from elements.js:
+const initialElements = createNodesAndEdges(tree);
+const elements = ref(initialElements);
+
+
+// Uncomment to get AST from panel.ts:
+/*
 let parsed = ref('this is where parsed data should be')
 let parsedHC = ref('this is where hardcoded data should be')
 const elements = ref([]);
-
-let parsedTree;
 
 window.addEventListener('message', async (event) => {
   const message = await event.data;
   if (message.type === 'parsed-data') {
     parsedHC.value = tree;
-    parsedTree = message.value;
+    let parsedTree = message.value;
   }
   const initialElements = createNodesAndEdges(parsedTree);
   parsed.value = initialElements;
   elements.value = initialElements;
 });
+*/
 
-// Need to call 'createNodesAndEdges' inside of an event listener for a post message carrying AST data from panel.ts
 
 /**
  * useVueFlow provides all event handlers and store properties
@@ -239,7 +259,7 @@ function toggleClass() {
     :min-zoom="0.2"
     :max-zoom="4"
   >
-
+      
     <template #node-template="{ data, label }">
       <Node :data="data" :oneway="data.oneway" :twoway="data.twoway" :label="label"/>
     </template>

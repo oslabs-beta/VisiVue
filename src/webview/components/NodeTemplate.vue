@@ -16,8 +16,17 @@
     }
   })
 
-  const c = JSON.stringify(props);
-  console.log('NodeTemplate: props.node:', c);
+  const oneway = props.oneway;
+  const twoway = props.twoway;
+  const label = props.label;
+
+  let handleColor;
+  if (oneway.length && twoway.length) handleColor = "#A219FF";
+  else if (oneway.length) handleColor = "rgb(255, 72, 72)";
+  else if (twoway.length) handleColor = "rgb(0, 102, 255)";
+
+  // const c = JSON.stringify(props);
+  // console.log('NodeTemplate: props.node:', c);
 
 </script>
 
@@ -41,7 +50,7 @@
     </template>
   </div>
 
-  <Handle id="a" type="target" :position="Position.Top" />
+  <Handle id="a" type="target" :style="{ '--vf-handle': handleColor }" :position="Position.Top" />
 
   <Handle id="b" type="source" :position="Position.Bottom" />
 </template>
