@@ -70,7 +70,9 @@ export class Parser {
 		while(queue.length !== 0) {
 			let curr: any = queue.shift();
       if (curr === 'dead') {continue;}
-			let sourceCode: string = fs.readFileSync(path.resolve(curr.filePath)).toString(); 
+			let sourceCode: string = fs.readFileSync(path.resolve(curr.filePath)).toString();
+      //read sourceCode, determine if there's scrip tags, set renderMe accordingly
+      //end it here if it doesn't have script tags
 			const arrOfChildren = this.getChildren(sourceCode, curr.fileName, id); // 1st iteration passing in App.vue --> [HelloWorld, TheWelcome]
       // imports objects have property isUsedInTemplate set to a boolean. Could be useful later...
       const imports = this.getImports(sourceCode, curr.fileName, id); // array of objects
@@ -95,6 +97,8 @@ export class Parser {
         }
         if (goodToCreateNode) {
           const newFileDirname = path.dirname(filePath);
+          const childSourceCode = fs.readFileSync(path.resolve(filePath)).toString();
+          if (!childSourceCode.includes('script' || 'script setup')) {break;};
           const childNode = {
             id: id,
             name: arrOfChildren[i], // log = App
@@ -146,20 +150,21 @@ export class Parser {
     transform(ast, {
       nodeTransforms: [
         (node) => {
-          if (node.hasOwnProperty('tag')) {
-            if (node['tag'] === component) {
-              // console.log('NODE: ', node);
-              if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name === 'model')) {
-                const twoWayDirective = node.props.find((prop) => prop.type === 7 && prop.name === 'model');
-                if (twoWayDirective.hasOwnProperty('arg')) {
-                  variables.twoway.push(twoWayDirective['arg'].content);
-                }
-              } else if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name !== 'model')){
-                const oneWayDirective = node.props.find((prop) => prop.type === 7 && prop.name !== 'model');
-                if (oneWayDirective.hasOwnProperty('arg')) {
-                  variables.oneway.push(oneWayDirective['arg'].content);
-                }
-
+          if (node.hasOwnProperty('tag') && node['tag'] === component) {
+            if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name === 'model')) {
+              const twoWayDirective = node.props.find((prop) => prop.type === 7 && prop.name === 'model');
+              
+              try {
+                variables.twoway.push(twoWayDirective['arg'].content);
+              } catch(error){
+                console.log("error: ", error);
+              }
+            } else if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name !== 'model')){
+              const oneWayDirective = node.props.find((prop) => prop.type === 7 && prop.name !== 'model');
+              try {
+                variables.oneway.push(oneWayDirective['arg'].content);
+              } catch(error){
+                console.log("error: ", error);
               }
             }
           }
