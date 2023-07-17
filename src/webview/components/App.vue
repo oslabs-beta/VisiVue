@@ -81,7 +81,7 @@ function createNodesAndEdges(tree) {
     
 
     // instantiate a new node and push to 'initialElements' array:
-    const newNode = new NewNode(nodeId, type, node.fileName, newPos, parentId, data);
+    const newNode = new NewNode(nodeId, type, node.name, newPos, parentId, data);
     initialElements.push(newNode);
     nodeId += 1;
     // console.log(initialElements);
