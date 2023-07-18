@@ -15,7 +15,7 @@ export const tree = {
               "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
             id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
             importPath: "/",
-            name: "Sidebar",
+            name: "GrandBaby One-A",
             parentList: [
               "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
             ],
@@ -41,7 +41,7 @@ export const tree = {
                   "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
                 id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
                 importPath: "/",
-                name: "Sidebar",
+                name: "G-G-Baby 1",
                 parentList: [
                   "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
                 ],
@@ -64,7 +64,7 @@ export const tree = {
               "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
             id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
             importPath: "/",
-            name: "Sidebar",
+            name: "GrandBaby One-B",
             parentList: [
               "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
             ],
@@ -87,7 +87,7 @@ export const tree = {
           "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
         id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
         importPath: "/",
-        name: "Sidebar",
+        name: "Child One",
         parentList: [
           "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
         ],
@@ -112,7 +112,7 @@ export const tree = {
             "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
           id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
           importPath: "/",
-          name: "Sidebar",
+          name: "GrandBaby One-C",
           parentList: [
             "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
           ],
@@ -138,7 +138,7 @@ export const tree = {
                 "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
               id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
               importPath: "/",
-              name: "Sidebar",
+              name: "G-G-Baby 2",
               parentList: [
                 "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
               ],
@@ -161,7 +161,7 @@ export const tree = {
             "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
           id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
           importPath: "/",
-          name: "Sidebar",
+          name: "GrandBaby One-D",
           parentList: [
             "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
           ],
@@ -184,7 +184,7 @@ export const tree = {
           "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
         id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
         importPath: "/",
-        name: "Sidebar",
+        name: "Child Two",
         parentList: [
           "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
         ],
@@ -207,7 +207,7 @@ export const tree = {
       "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
     id: "twJWgoTMrb7UkXQI8tC1iGPX9VpfK50I",
     importPath: "/",
-    name: "index",
+    name: "Parent",
     parentList: [],
     props: {
       oneWay: [],
@@ -227,7 +227,7 @@ export const tree = {
     "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
   id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
   importPath: "/",
-  name: "Sidebar",
+  name: "Index.tsx",
   parentList: [
     "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
   ],

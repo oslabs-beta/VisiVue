@@ -14,7 +14,10 @@ import Node from "./NodeTemplate";
 import FileImport from "./FileImport"
 import { tree } from "./elements";
 
-// // create a node constructor func:
+
+// Create an array of nodes and edges objects:
+function createNodesAndEdges(tree) {
+  // create a node constructor func:
 function NewNode(id, type, label, position, parentId, data) {
   this.id = id;
   this.type = type;
@@ -33,122 +36,158 @@ function NewEdge(id, source, target, style, animated) {
   this.style = style;
   this.animated = animated;
 }
-
-// Create instances of nodes and edges and push to 'initialElements':
-function createNodesAndEdges(tree) {
   // console.log(tree);
+  const result = [];
   const initialElements = [];
+  const edges = [];
 
-  const q = [tree];
+  const levels = [];
+  const q = [];
+  if (tree) {q.push(tree);}
+
   let nodeId = 1;
-  let x = [0]; // []
-  let y = [0]; // []
 
-  while (q.length) {
-    // initialize variables and save to respective values:
-    const node = q.shift();
-    // let type = "";
-    let type = "template";
-    let newPos = { x: x.shift(), y: y.shift() }; // {x: 250, y: 0}
-    let parentId = "";
-
-    // Add oneway and twoway props from AST to 'data' to be passed into a new instance of NewNode:
-    const oneway = node.props.oneWay;
-    const twoway = node.props.twoWay;
-    const data = {oneway, twoway};
-    // data.oneway.push('');
-    // data.twoway.push('');
-
-    // const d = JSON.stringify(data);
-    // console.log('Data: ',d);
-
-    const data1 = {};
-    
-
-    // change 'type' property based on if the node is a root node or leaf node:
-    if (!initialElements.length) {
-      type = "input";
-    }
-    // if (!node.children.length) {
-    //   type = "output";
-    // }
-
-    // if the current node in the AST has a parentId property, assign it to 'parentId'
-    if (node.parentId) {
-      parentId = node.parentId;
-    }
-    
-
-    // instantiate a new node and push to 'initialElements' array:
-    const newNode = new NewNode(nodeId, type, node.name, newPos, parentId, data);
-    initialElements.push(newNode);
-    nodeId += 1;
-    // console.log(initialElements);
-
-    // If the current node has children, push its children to the 'q' and create x and y postions for each child and push them to 'xQ' and 'yQ' respectively
-    if (node.children.length) {
-      // push all child nodes to 'q'
-      q.push(...node.children);
-
-      // intialize variable to calculate x and y positions:
-      let horizontalSpace = 200; // horizontal space between sibling nodes
-      let verticalSpace = 150; // vertical space between parent/child nodes
-      let newXPos = -((node.children.length * horizontalSpace) / 2 - horizontalSpace / 2);
-      // console.log(newXPos);
-
-      // create new x and y positions for each child node and push to respective arrays:
-      for (let i = 0; i < node.children.length; i++) {
-        x.push(newNode.position.x + newXPos);
-        newXPos += horizontalSpace;
-        y.push(newNode.position.y + verticalSpace);
-
-        // add a 'parentId' to all children of the current node in the AST:
-        node.children[i].parentId = newNode.id;
-      }
-    }
-
-    // Instantiate a new edge object and push to 'initialElements' array
-    if (newNode.parentId) {
-      const id = `e${newNode.parentId}-${newNode.id}`;
-      
-      // assign edge width and animation based on stateful variables:
-      let animated = false;
-      let strokeWidth;
-      if (newNode.data.oneway.length || newNode.data.twoway.length) {
-        animated = true;
-        strokeWidth = '4px';
-      }  
-
-      // assign edge color based on stateful variables:
-      let color;
-      if (newNode.data.oneway.length && newNode.data.twoway.length) color = '#A219FF';
-      else if (newNode.data.oneway.length) color = 'rgb(255, 72, 72)';
-      else if (newNode.data.twoway.length) color = 'rgb(0, 102, 255)';
-      const style = { stroke: `${color}`, strokeWidth: `${strokeWidth}` };
-
-      // instantiate a new edge and push to 'initialElements'
-      const newEdge = new NewEdge(id, `${newNode.parentId}`, `${newNode.id}`, style, animated);
-      initialElements.push(newEdge);
-    }
-    // console.log("Initial Elements:", initialElements);
-    // nodeQ = [rootNode, child1, child2a, child2b];
-    // xQ = [250, 250, 150, 350];
-    // yQ = [0, 100, 200, 200];
+  const pos = {
+    lastNode: 1,
+    1: { x: 0, y: 0 },
   }
-  return initialElements;
+  // const containers = {};
+
+  // traverse the tree and build node and edge objects
+  while (q.length) {
+    const level = [];
+    const l = q.length;
+
+    for (let i = 0; i < l; i ++) {
+      // initialize variables and save to respective values:
+      const node = q.shift();
+      let type = "template";
+      let newPos = pos[nodeId];
+      let parentId = "";
+
+      // Add oneway and twoway props from AST to 'data' to be passed into a new instance of NewNode:
+      const oneway = node.props.oneWay;
+      const twoway = node.props.twoWay;
+      const data = {oneway, twoway};
+
+      // change 'type' property based on if the node is a root node or leaf node:
+      if (!initialElements.length) {
+        type = "input";
+      }
+
+      // if the current node in the AST has a parentId property, assign it to 'parentId'
+      if (node.parentId) {
+        parentId = node.parentId;
+      }
+
+      // instantiate a new node and push to 'initialElements' array:
+      const newNode = new NewNode(nodeId, type, node.name, newPos, parentId, data);
+      level.push(newNode);
+
+      // If the current node has children, push its children to the 'q' and create x and y postions for each child and push them to 'xQ' and 'yQ' respectively
+      if (node.children.length) {
+        // push all child nodes to 'q'
+        q.push(...node.children);
+
+        // intialize variable to calculate x and y positions:
+        let horizontalSpace = 250; // horizontal space between sibling nodes
+        let verticalSpace = 150; // vertical space between parent/child nodes
+        let newXPos = -((node.children.length * horizontalSpace) / 2 - horizontalSpace / 2);
+
+
+        // create new x and y positions for each child node:
+
+        // find the id of the last sibling node:
+        let childId = pos.lastNode + 1; 
+
+        for (let i = 0; i < node.children.length; i++) {
+          // initialize x and y positions
+          let x = newNode.position.x + newXPos;
+          let y = newNode.position.y + verticalSpace;
+
+          let prevNode = pos[childId - 1];
+
+          // assign 'x' position based on if the current node is the first in a level or not:
+          if (prevNode.y === y) x = Math.max(prevNode.x + horizontalSpace, x);
+      
+          // assign a new property to 'pos' for the current child node
+          pos[childId] = { x, y }
+
+          // update lastNode property on 'pos'
+          pos.lastNode = childId;
+          // update newXPos
+          newXPos += horizontalSpace;
+          // containers[newNode.id].children.push(childId);
+
+          // add a 'parentId' to all children of the current node in the AST:
+          node.children[i].parentId = newNode.id;
+          // increment 'childId'
+          childId += 1;
+        }
+      }
+
+      // Instantiate a new edge object and push to 'initialElements' array
+      if (newNode.parentId) {
+        const id = `e${newNode.parentId}-${newNode.id}`;
+
+        // assign edge width and animation based on stateful variables:
+        let animated = false;
+        let strokeWidth;
+        if (newNode.data.oneway.length || newNode.data.twoway.length) {
+          animated = true;
+          strokeWidth = '8px';
+        }
+
+        // assign edge color based on stateful variables:
+        let color;
+        if (newNode.data.oneway.length && newNode.data.twoway.length) color = '#A219FF';
+        // else if (newNode.data.oneway.length) color = 'rgb(255, 72, 72)';
+        // else if (newNode.data.twoway.length) color = 'rgb(0, 102, 255)';
+        else if (newNode.data.oneway.length) color = 'rgb(0, 80, 199)';
+        else if (newNode.data.twoway.length) color = '#41B883';
+
+        const style = { stroke: `${color}`, strokeWidth: `${strokeWidth}` };
+
+        // instantiate a new edge and push to 'initialElements'
+        const newEdge = new NewEdge(id, `${newNode.parentId}`, `${newNode.id}`, style, animated);
+        edges.push(newEdge);
+
+        // const customEdge = new NewEdge('e2-3', '2', '3', { stroke: '#41B883', strokeWidth: `8px` }, 'true');
+        // edges.push(customEdge);
+      }
+
+      // increment node ID:
+      nodeId += 1;
+    }
+    if (level.length) {initialElements.push(level);}
+  };
+
+  // const e = JSON.stringify(initialElements);
+  // console.log('App.vue: edges:', e);
+
+  // Add node objects to 'result' array
+  for (let i = 0; i < initialElements.length; i ++) {
+    for (let j = 0; j < initialElements[i].length; j ++) {
+      result.push(initialElements[i][j]);
+    };
+  };
+  
+  // push edge object into 'result' array
+  result.push(...edges);
+
+  return result;
 }
- 
 
-// uncomment to get AST from elements.js:
-// const initialElements = createNodesAndEdges(tree);
-// const elements = ref(initialElements);
+/* uncomment to get AST from elements.js: */
+const initialElements = createNodesAndEdges(tree);
+const elements = ref(initialElements);
 
 
-// Uncomment to get AST from panel.ts:
-let parsedTree;
-let parsed = ref('this is where parsed data should be')
-let parsedHC = ref('this is where hardcoded data should be')
-const elements = ref([]);
+/* Uncomment to get AST from panel.ts: */
+// let parsedTree;
+// let parsed = ref('this is where parsed data should be')
+// let parsedHC = ref('this is where hardcoded data should be')
+// const elements = ref([]);
 
 window.addEventListener('message', async (event) => {
   const message = await event.data;
