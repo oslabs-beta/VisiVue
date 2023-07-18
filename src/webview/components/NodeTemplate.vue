@@ -25,9 +25,6 @@
   else if (oneway.length) handleColor = "rgb(255, 72, 72)";
   else if (twoway.length) handleColor = "rgb(0, 102, 255)";
 
-  // const c = JSON.stringify(props);
-  // console.log('NodeTemplate: props.node:', c);
-
 </script>
 
 <template>
