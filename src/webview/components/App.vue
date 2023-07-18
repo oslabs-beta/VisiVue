@@ -14,7 +14,7 @@ import Node from "./NodeTemplate";
 import FileImport from "./FileImport"
 import { tree } from "./elements";
 
-// create a node constructor func:
+// // create a node constructor func:
 function NewNode(id, type, label, position, parentId, data) {
   this.id = id;
   this.type = type;
@@ -80,7 +80,7 @@ function createNodesAndEdges(tree) {
     
 
     // instantiate a new node and push to 'initialElements' array:
-    const newNode = new NewNode(nodeId, type, node.fileName, newPos, parentId, data);
+    const newNode = new NewNode(nodeId, type, node.name, newPos, parentId, data);
     initialElements.push(newNode);
     nodeId += 1;
     // console.log(initialElements);

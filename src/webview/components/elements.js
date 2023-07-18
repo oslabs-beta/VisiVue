@@ -1,4 +1,3 @@
-// import node from './NodeTemplate';
 
 export const tree = {
   children: [{
@@ -102,7 +101,80 @@ export const tree = {
         // [[Prototype]]: Object,
       },
       {
-        children: [],
+        children: [{
+          children: [],
+          count: 1,
+          depth: 0,
+          error: "",
+          expanded: false,
+          fileName: "GrandBaby One-C",
+          filePath:
+            "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
+          id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
+          importPath: "/",
+          name: "Sidebar",
+          parentList: [
+            "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
+          ],
+          props: {
+            oneWay: [],
+            twoWay: [],
+          },
+          reactRouter: false,
+          reduxConnect: false,
+          thirdParty: false,
+          // [[Prototype]]: Object,
+        },
+        {
+          children: [
+            {
+              children: [],
+              count: 1,
+              depth: 0,
+              error: "",
+              expanded: false,
+              fileName: "G-G-Baby 2",
+              filePath:
+                "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
+              id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
+              importPath: "/",
+              name: "Sidebar",
+              parentList: [
+                "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
+              ],
+              props: {
+                oneWay: ['p-3'],
+                twoWay: [],
+              },
+              reactRouter: false,
+              reduxConnect: false,
+              thirdParty: false,
+              // [[Prototype]]: Object,
+            },
+          ],
+          count: 1,
+          depth: 0,
+          error: "",
+          expanded: false,
+          fileName: "GrandBaby One-D",
+          filePath:
+            "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/components/Sidebar.tsx",
+          id: "FA6sF8JbqMloijRT6QOxHh3i5p1v29bJ",
+          importPath: "/",
+          name: "Sidebar",
+          parentList: [
+            "/Users/abehenderson/Documents/Codesmith/ReacTree/src/webview/index.tsx",
+          ],
+          props: {
+            oneWay: ['p-3'],
+            twoWay: ['p-2'],
+          },
+          reactRouter: false,
+          reduxConnect: false,
+          thirdParty: false,
+          // [[Prototype]]: Object,
+        },
+      ],
         count: 1,
         depth: 0,
         error: "",
@@ -168,3 +240,5 @@ export const tree = {
   thirdParty: false,
   // [[Prototype]]: Object,
 };
+
+
