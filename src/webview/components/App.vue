@@ -140,12 +140,12 @@ function createNodesAndEdges(tree) {
  
 
 // uncomment to get AST from elements.js:
-const initialElements = createNodesAndEdges(tree);
-const elements = ref(initialElements);
+// const initialElements = createNodesAndEdges(tree);
+// const elements = ref(initialElements);
 
 
 // Uncomment to get AST from panel.ts:
-/*
+let parsedTree;
 let parsed = ref('this is where parsed data should be')
 let parsedHC = ref('this is where hardcoded data should be')
 const elements = ref([]);
@@ -154,13 +154,12 @@ window.addEventListener('message', async (event) => {
   const message = await event.data;
   if (message.type === 'parsed-data') {
     parsedHC.value = tree;
-    let parsedTree = message.value;
+    parsedTree = message.value;
   }
   const initialElements = createNodesAndEdges(parsedTree);
   parsed.value = initialElements;
   elements.value = initialElements;
 });
-*/
 
 
 /**

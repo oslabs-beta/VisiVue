@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(disposable);
 
-  // Create sVue status bar button
+  // Create sVue status bar button in the bottom right of vscode
   const item = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right
   );

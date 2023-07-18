@@ -11,6 +11,7 @@ import * as vueTemplateCompiler from 'vue-template-compiler';
 import * as vueCompiler from '@vue/compiler-sfc';
 // import { traverseNode, createTransformContext, transform } from '@vue/compiler-core'
 import { parse, transform } from '@vue/compiler-dom';
+import { DirectiveNode } from '@vue/compiler-core'
 // import traverseNode from '@vue/compiler-sfc/dist/compiler-sfc.cjs';
 // const traverse = require('@babel/traverse').default;
 // import { parse }from '@vue/compiler-sfc';
@@ -62,50 +63,71 @@ export class Parser {
 
 	// DON'T FORGET TO CHANGE TYPES LATER AFTER TESTING IS DONE
   private parser(root: Tree): void {
-    console.log('root before iteration', root)
-    const { fileName, fileDirname } = root;
-    // get the filePath
-		const queue = [root];
+    // // get the filePath
+		let queue: (Tree | string)[] = [root];
     let id = root.id;
 		// iterate through tree 
 		while(queue.length !== 0) {
 			let curr: any = queue.shift();
-      
-			let sourceCode: string = fs.readFileSync(path.resolve(curr.filePath)).toString(); 
-
+      if (curr === 'dead') {continue;}
+			let sourceCode: string = fs.readFileSync(path.resolve(curr.filePath)).toString();
+      //read sourceCode, determine if there's scrip tags, set renderMe accordingly
+      //end it here if it doesn't have script tags
 			const arrOfChildren = this.getChildren(sourceCode, curr.fileName, id); // 1st iteration passing in App.vue --> [HelloWorld, TheWelcome]
+      // imports objects have property isUsedInTemplate set to a boolean. Could be useful later...
+      const imports = this.getImports(sourceCode, curr.fileName, id); // array of objects
       // iterate through array of child components and instantiate a new ChildNode class
-      arrOfChildren.forEach((child) => {
-        const arrayOfVariables = this.extractVariables(sourceCode, child);
+      for (let i = 0; i < arrOfChildren.length; i++) {
+        let goodToCreateNode = false;
+        const objOfVariables = this.extractVariables(sourceCode, arrOfChildren[i]);
         id = `${+id + 1}`;
-        const path = fileDirname + '/components/' + `${child}.vue`;
-        const childNode = {
-          id: id,
-          name: child, // log = App
-          fileName: `${child}.vue`, // log = App.vue
-          filePath: path, // log = /Users/chrispark/MultiComponentVue/src/App.vue
-          fileDirname: fileDirname, // log = /Users/chrispark/MultiComponentVue/src
-          importPath: '/',
-          parentList: [],
-          children: [],
-          props: {
-            oneWay: [],
-            twoWay: []
-          },
-          allVariables: [],
-          error: ''
-        };
-        arrayOfVariables.twoway.forEach(el => {
-          childNode.props.twoWay.push(el.exp.content);
-        });
-        arrayOfVariables.oneway.forEach(el => {
-          childNode.props.oneWay.push(el.exp.content);
-        })
-        curr.children.push(childNode);
-        queue.push(childNode);
-      });
+        let filePath = curr.fileDirname;
+        for (let j = 0; j < imports.length; j++) {
+          if (imports[j].local === arrOfChildren[i]) {
+            if (imports[j].source[0] !== '@') {
+              if (imports[j].source.includes('.vue')) {
+                filePath += imports[j].source.slice(1);
+              } else {
+                filePath += imports[j].source.slice(1) + '.vue';
+              }
+              goodToCreateNode = true;
+              break;
+            }
+          }
+        }
+        if (goodToCreateNode) {
+          const newFileDirname = path.dirname(filePath);
+          const childSourceCode = fs.readFileSync(path.resolve(filePath)).toString();
+          if (!childSourceCode.includes('script' || 'script setup')) {break;};
+          const childNode = {
+            id: id,
+            name: arrOfChildren[i], // log = App
+            fileName: `${arrOfChildren[i]}.vue`, // log = App.vue
+            filePath, // log = /Users/chrispark/MultiComponentVue/src/App.vue
+            fileDirname: newFileDirname, // log = /Users/chrispark/MultiComponentVue/src
+            importPath: '/',
+            parentList: [],
+            children: [],
+            props: {
+              oneWay: [],
+              twoWay: []
+            },
+            allVariables: [],
+            error: ''
+          };
+          objOfVariables.twoway.forEach(el => {
+            childNode.props.twoWay.push(el);
+          });
+          objOfVariables.oneway.forEach(el => {
+            childNode.props.oneWay.push(el);
+          });
+          curr.children.push(childNode);
+          queue.push(childNode);
+        } else {
+          queue.push('dead');
+        }
+      }
 		}
-
   };
 
   public getTree(): Tree{
@@ -117,7 +139,8 @@ export class Parser {
     const arrOfChildren = vueCompiler.compileTemplate({ source: sourceCode, filename, id }).ast.components;
     return arrOfChildren;
   }
-
+  // helper function to extract variables when iterating through the components
+  // parse is imported from @vue/compiler-dom
   public extractVariables(template: string, component: string): any {
     const variables = {
       oneway: [],
@@ -127,15 +150,21 @@ export class Parser {
     transform(ast, {
       nodeTransforms: [
         (node) => {
-          if (node.hasOwnProperty('tag')) {
-            if (node['tag'] === component) {
-              console.log("NODE: ", node);
-              if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name === 'model')) {
-                const twoWayDirective = node.props.find((prop) => prop.type === 7 && prop.name === 'model');
-                variables.twoway.push(twoWayDirective);
-              } else if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name !== 'model')){
-                const oneWayDirective = node.props.find((prop) => prop.type === 7 && prop.name !== 'model');
-                variables.oneway.push(oneWayDirective);
+          if (node.hasOwnProperty('tag') && node['tag'] === component) {
+            if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name === 'model')) {
+              const twoWayDirective = node.props.find((prop) => prop.type === 7 && prop.name === 'model');
+              
+              try {
+                variables.twoway.push(twoWayDirective['arg'].content);
+              } catch(error){
+                console.log("error: ", error);
+              }
+            } else if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name !== 'model')){
+              const oneWayDirective = node.props.find((prop) => prop.type === 7 && prop.name !== 'model');
+              try {
+                variables.oneway.push(oneWayDirective['arg'].content);
+              } catch(error){
+                console.log("error: ", error);
               }
             }
           }
@@ -144,22 +173,18 @@ export class Parser {
     });
     return variables;
   }
+  // call parse method from vueCompiler on current component. It will return an object of type SFCParseResult
+  // store result in a variable and access descriptor property. 
+  // We will then use this to pass into SFC compileScript as the first argument
+  // second arg is options which only requires id
+  // this will return an object of type SFCScriptBlock
+  // store what is returned in a variable and then access the imports property
+  public getImports(template: string, filename: string, id: string): any {
+    if (!template.includes('script' || 'script setup')) {return [];}
+    const { descriptor } = vueCompiler.parse(template, {filename}); // return object type SFCParseResult with descriptor property
+    const { imports } = vueCompiler.compileScript(descriptor, {id}); // return object type SFCScriptBlock with imports property
+    const result = Object.values(imports);
+    return result;
+  }
 }
-    // console.log('root after iteration', root);
-    // const context = createTransformContext(root, {});
-    // console.log('context from createTransformContext func', context);
-    // const traverseTest = traverseNode(root, context);
-    // console.log('testing traverseNode on root: ', traverseTest);
 
-  // private getScriptVariables(scriptAst: babelParser.ParseResult<File>): string[]{
-  //     const vars = [];
-  //     traverse(scriptAst, {
-  //       VariableDeclarator(path) {
-  //         if (path.node.id.type === 'Identifier') {
-  //           const varName = path.node.id.name;
-  //           vars.push(varName);
-  //         }
-  //       },
-  //     });
-  //     return vars;
-  //   }
