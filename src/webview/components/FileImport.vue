@@ -1,7 +1,5 @@
 <template>
-  <label class="btn btn-xs btn-primary">
-    <input type="file" name="attachment[]" id="file-import" @change="handleFileUpload" multiple/>
-  </label>
+  <input id="file-import" type="file" @change="handleFileUpload">
 </template>
 
 <script setup>

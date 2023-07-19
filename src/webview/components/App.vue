@@ -186,8 +186,6 @@ function createNodesAndEdges(tree) {
 
 /* Uncomment to get AST from panel.ts: */
 let parsedTree;
-let parsed = ref('this is where parsed data should be')
-let parsedHC = ref('this is where hardcoded data should be')
 const elements = ref([]);
 
 window.addEventListener('message', async (event) => {
@@ -280,7 +278,9 @@ function toggleClass() {
 </script>
 
 <template>
-  <FileImport style="position: fixed; z-index: 1" />
+  <div style="position: fixed; z-index: 1">
+    <FileImport />
+  </div>
 
   <VueFlow
     v-model="elements"
