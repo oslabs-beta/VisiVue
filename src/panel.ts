@@ -2,10 +2,9 @@ import * as vscode from 'vscode';
 import { Parser } from './parser';
 
 export default class Panel {
-  // Declare variables to be read
   public static currentPanel: Panel | undefined;
 
-  private static readonly viewType = 'sVue';
+  private static readonly viewType = 'VisiVue';
 
   private readonly _panel: vscode.WebviewPanel;
   private readonly _extensionUri: vscode.Uri;
@@ -13,15 +12,9 @@ export default class Panel {
   private _disposables: vscode.Disposable[] = [];
   private parser: Parser | undefined;
   
-  //declare methods to be used by the class
-
-  // method to see if a panel already exists. If not, create a new panel with the 'context' passed into it in the extension.ts file
+  // Method to see if a panel already exists. If not, create a new panel with the 'context' passed into it in the extension.ts file
   public static createOrShow(context: vscode.ExtensionContext) {
-
-    // Assign 'column' to the panel ('viewColumn') that the user is focused on or none (undefined)
     const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined;
-
-    // Panel exists? Show it. Else create one.
     if (Panel.currentPanel){
       Panel.currentPanel._panel.reveal(column);
     } else {
@@ -29,32 +22,22 @@ export default class Panel {
     }
   }
 
-  //declare constructor for every new instance of a Panel
   private constructor(_context: vscode.ExtensionContext, column: vscode.ViewColumn) {
-    // set '_context' property to the passed in argument when the constructor is called
-    // set uri of this panel using the native extensionUri method (VSCode API) on the '_context' variable we just declared
-    // .extensionUri = 'the uri of the directory containing the extension'
     this._context = _context;
     this._extensionUri = _context.extensionUri;
     
     // Create and show a new webview panel
-    // 
-    this._panel = vscode.window.createWebviewPanel(Panel.viewType, "sVueTree", column, {
+    this._panel = vscode.window.createWebviewPanel(Panel.viewType, "VisiVueTree", column, {
       enableScripts: true,
       retainContextWhenHidden: true,
       localResourceRoots: [this._extensionUri],
     });
     
     // Set the webview's initial html content
-    // '.Webview' = A panel that contains a webview
     this._panel.webview.html = this._getHtmlForWebview(this._panel.webview);
     
-    
     //Listen for when the panel gets disposed
-    //disposed - when the user closes the panel or when closed programatically (thru code)
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-    // VSCode API Native Method: onDidReceiveMessage() = event that fires when webview content posts a message
-    // Webview content can only post strings of json serializable objects back to our extension
     this._panel.webview.onDidReceiveMessage(
       async (msg: any) => {
         switch (msg.type) {
@@ -63,11 +46,16 @@ export default class Panel {
               // connects us to parser file
               this.parser = new Parser(msg.value);
               this.parser.entryFileParse();
-              this.updateView();
+              this.updateView();  
             }
             break;
+          // For the implementation of a button on each individual node that will redirect the user to the source code
+          // of the given component that is clicked on. For this to work, must post a message with the type being 'onViewFile'
+          // so that this case gets hit.
           case 'onViewFile':
-            if (!msg.value) return;
+            if (!msg.value) { 
+              return; 
+            };
             const doc = await vscode.workspace.openTextDocument(msg.value);
             const editor = await vscode.window.showTextDocument(doc, {
               preserveFocus: false,
@@ -81,23 +69,19 @@ export default class Panel {
     );
   }
   
+  // Whenever a new file is uploaded, it is parsed. We retrieve the tree and post it to the front-end
   private async updateView() {
-    // Saves current state of the tree to the workspace state
     const tree = this.parser!.getTree();
-    // console.log('AST TREE: ', tree);
-    this._context.workspaceState.update('sVueTree', tree);
+    this._context.workspaceState.update('VisiVueTree', tree);
     this._panel.webview.postMessage({
       type: 'parsed-data',
       value: tree,
-      settings: await vscode.workspace.getConfiguration('sVueTree')
+      settings: await vscode.workspace.getConfiguration('VisiVueTree')
     });
   }
   
-  // method to clear disposables array and 'clean' the data
+  // Method to clear disposables array and 'clean' the data
   public dispose() {
-    // makes class panel null
-    // set current panel to undefined to start
-    // a disposable method is called on _panel to initiate the removal process. Entering the the while loop to start popping out all objects stored in an array when createOrShow is invoked
     Panel.currentPanel = undefined;
     this._panel.dispose();
     while (this._disposables.length) {
@@ -107,18 +91,9 @@ export default class Panel {
       }
     }
   }
-  
-  // get html for webview
-  // convert our file to a uri that webview can interpret
-    // We do this for our scripts well as our styles
   private _getHtmlForWebview(webview: vscode.Webview) {
     // @ts-ignore
     const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'main.wv.js'));
-    
-    // const styleUri = webview.asWebviewUri(
-    //   vscode.Uri.joinPath(this._extensionUri, 'media', 'styles.css')
-    // );
-
     return `
     <!DOCTYPE html>
     <html lang="en">
@@ -142,6 +117,3 @@ export default class Panel {
     `;
   }
 }
-
-
-
