@@ -192,11 +192,11 @@ const elements = ref(initialElements);
 window.addEventListener('message', async (event) => {
   const message = await event.data;
   if (message.type === 'parsed-data') {
-    parsedHC.value = tree;
+    parsedHC.value = tree; // console.log
     parsedTree = message.value;
   }
   const initialElements = createNodesAndEdges(parsedTree);
-  parsed.value = initialElements;
+  parsed.value = initialElements; // console.log
   elements.value = initialElements;
 });
 
@@ -285,7 +285,10 @@ function toggleClass() {
 </script>
 
 <template>
-  <FileImport />
+  <div style="position: fixed">
+    <FileImport />
+  </div>
+  
   <div style="color: #000;">{{ parsed }}</div>
   <!-- <div style="color: red;">{{ parsedHC }}</div> -->
 
