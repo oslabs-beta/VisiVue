@@ -48,7 +48,6 @@
   </div>
 
   <Handle id="a" type="target" :style="{ '--vf-handle': handleColor }" :position="Position.Top" />
-
   <Handle id="b" type="source" :position="Position.Bottom" />
 </template>
 
