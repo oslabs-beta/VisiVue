@@ -5,7 +5,6 @@ export function activate(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand(
     "extension.showPanel",
     () => {
-      // vscode.window.showInformationMessage('Panel shown from extension.');
       // @ts-ignore
       Panel.createOrShow(context);
     }
@@ -13,14 +12,14 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(disposable);
 
-  // Create sVue status bar button in the bottom right of vscode
+  // Create VisiVue status bar button in the bottom right of vscode
   const item = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right
   );
 
   item.command = "extension.showPanel";
-  item.tooltip = "Activate sVue Extension";
-  item.text = "$(type-hierarchy) Launch sVue";
+  item.tooltip = "Activate VisiVue Extension";
+  item.text = "$(type-hierarchy) Launch VisiVue";
   item.show();
 }
 export function deactivate() {}

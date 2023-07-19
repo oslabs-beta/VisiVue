@@ -1,10 +1,8 @@
 <template>
-
-    <div id="container">
+  <div id="container">
       <div id="button">Import File</div>
-      <input id="file-input" type="file" />
+      <input id="file-input" type="file" @change="handleFileUpload" />
     </div>
-
 </template>
 
 <script setup>
@@ -13,12 +11,10 @@
  
 
   const vscode = acquireVsCodeApi();
-  
 	function handleFileUpload(event) {
     event.preventDefault();
     const filePath = event.target.files[0].path;
     event.target.value = null;
-    string.value = filePath;
     if (filePath) {
       vscode.postMessage({
         type: "onFile",

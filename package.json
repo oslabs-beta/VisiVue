@@ -15,7 +15,7 @@
     "commands": [
       {
         "command": "extension.showPanel",
-        "title": "Show sVue Panel"
+        "title": "Show VisiVue Panel"
       },
       {
         "command": "extension.testPanel",

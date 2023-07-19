@@ -11,6 +11,5 @@ export type Tree = {
     oneWay: string[];
     twoWay: string[];
   };
-  allVariables: string[];
   error: string;
 };

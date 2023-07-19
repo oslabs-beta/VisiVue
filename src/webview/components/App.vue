@@ -17,29 +17,29 @@ import ColorKey from "./ColorKey.vue";
 
 // Create an array of nodes and edges objects:
 function createNodesAndEdges(tree) {
-  // create a node constructor func:
-  function NewNode(id, type, label, position, parentId, data) {
-    this.id = id;
-    this.type = type;
-    this.label = label;
-    this.position = position;
-    this.parentId = parentId;
-    this.data = data;
-    this.class = "light";
-  }
-  // create an edge constructor func:
-  function NewEdge(id, source, target, style, animated) {
-    this.id = id;
-    this.label;
-    this.source = source;
-    this.target = target;
-    this.style = style;
-    this.animated = animated;
-  }
-  // console.log(tree);
-  const result = [];
-  const initialElements = [];
-  const edges = [];
+    // create a node constructor func:
+    function NewNode(id, type, label, position, parentId, data) {
+      this.id = id;
+      this.type = type;
+      this.label = label;
+      this.position = position;
+      this.parentId = parentId;
+      this.data = data;
+      this.class = "light";
+    }
+    // Edge constructor function
+    function NewEdge(id, source, target, style, animated) {
+      this.id = id;
+      this.label;
+      this.source = source;
+      this.target = target;
+      this.style = style;
+      this.animated = animated;
+    }
+    // console.log(tree);
+    const result = [];
+    const initialElements = [];
+    const edges = [];
 
   const levels = [];
   const q = [];
@@ -47,18 +47,18 @@ function createNodesAndEdges(tree) {
     q.push(tree);
   }
 
-  let nodeId = 1;
+    let nodeId = 1;
 
-  const pos = {
-    lastNode: 1,
-    1: { x: 0, y: 0 },
-  };
-  // const containers = {};
+    const pos = {
+      lastNode: 1,
+      1: { x: 0, y: 0 },
+    }
+    // const containers = {};
 
-  // traverse the tree and build node and edge objects
-  while (q.length) {
-    const level = [];
-    const l = q.length;
+    // traverse the tree and build node and edge objects
+    while (q.length) {
+      const level = [];
+      const l = q.length;
 
     for (let i = 0; i < l; i++) {
       // initialize variables and save to respective values:
@@ -72,15 +72,15 @@ function createNodesAndEdges(tree) {
       const twoway = node.props.twoWay;
       const data = { oneway, twoway };
 
-      // change 'type' property based on if the node is a root node or leaf node:
-      if (!initialElements.length) {
-        type = "input";
-      }
+        // change 'type' property based on if the node is a root node or leaf node:
+        if (!initialElements.length) {
+          type = "input";
+        }
 
-      // if the current node in the AST has a parentId property, assign it to 'parentId'
-      if (node.parentId) {
-        parentId = node.parentId;
-      }
+        // if the current node in the AST has a parentId property, assign it to 'parentId'
+        if (node.parentId) {
+          parentId = node.parentId;
+        }
 
       // instantiate a new node and push to 'initialElements' array:
       const newNode = new NewNode(
@@ -93,10 +93,10 @@ function createNodesAndEdges(tree) {
       );
       level.push(newNode);
 
-      // If the current node has children, push its children to the 'q' and create x and y postions for each child and push them to 'xQ' and 'yQ' respectively
-      if (node.children.length) {
-        // push all child nodes to 'q'
-        q.push(...node.children);
+        // If the current node has children, push its children to the 'q' and create x and y postions for each child and push them to 'xQ' and 'yQ' respectively
+        if (node.children.length) {
+          // push all child nodes to 'q'
+          q.push(...node.children);
 
         // intialize variable to calculate x and y positions:
         let horizontalSpace = 250; // horizontal space between sibling nodes
@@ -106,17 +106,17 @@ function createNodesAndEdges(tree) {
           horizontalSpace / 2
         );
 
-        // create new x and y positions for each child node:
+          // create new x and y positions for each child node:
 
         // find the id of the last sibling node:
         let childId = pos.lastNode + 1;
 
-        for (let i = 0; i < node.children.length; i++) {
-          // initialize x and y positions
-          let x = newNode.position.x + newXPos;
-          let y = newNode.position.y + verticalSpace;
+          for (let i = 0; i < node.children.length; i++) {
+            // initialize x and y positions
+            let x = newNode.position.x + newXPos;
+            let y = newNode.position.y + verticalSpace;
 
-          let prevNode = pos[childId - 1];
+            let prevNode = pos[childId - 1];
 
           // assign 'x' position based on if the current node is the first in a level or not:
           if (prevNode.y === y) x = Math.max(prevNode.x + horizontalSpace, x);
@@ -124,22 +124,22 @@ function createNodesAndEdges(tree) {
           // assign a new property to 'pos' for the current child node
           pos[childId] = { x, y };
 
-          // update lastNode property on 'pos'
-          pos.lastNode = childId;
-          // update newXPos
-          newXPos += horizontalSpace;
-          // containers[newNode.id].children.push(childId);
+            // update lastNode property on 'pos'
+            pos.lastNode = childId;
+            // update newXPos
+            newXPos += horizontalSpace;
+            // containers[newNode.id].children.push(childId);
 
-          // add a 'parentId' to all children of the current node in the AST:
-          node.children[i].parentId = newNode.id;
-          // increment 'childId'
-          childId += 1;
+            // add a 'parentId' to all children of the current node in the AST:
+            node.children[i].parentId = newNode.id;
+            // increment 'childId'
+            childId += 1;
+          }
         }
-      }
 
-      // Instantiate a new edge object and push to 'initialElements' array
-      if (newNode.parentId) {
-        const id = `e${newNode.parentId}-${newNode.id}`;
+        // Instantiate a new edge object and push to 'initialElements' array
+        if (newNode.parentId) {
+          const id = `e${newNode.parentId}-${newNode.id}`;
 
         // assign edge width and animation based on stateful variables:
         let animated = false;
@@ -158,7 +158,7 @@ function createNodesAndEdges(tree) {
         else if (newNode.data.oneway.length) color = "rgb(66, 136, 242)";
         else if (newNode.data.twoway.length) color = "rgb(66, 211, 146)";
 
-        const style = { stroke: `${color}`, strokeWidth: `${strokeWidth}` };
+          const style = { stroke: `${color}`, strokeWidth: `${strokeWidth}` };
 
         // instantiate a new edge and push to 'initialElements'
         const newEdge = new NewEdge(
@@ -170,9 +170,9 @@ function createNodesAndEdges(tree) {
         );
         edges.push(newEdge);
 
-        // const customEdge = new NewEdge('e2-3', '2', '3', { stroke: '#41B883', strokeWidth: `8px` }, 'true');
-        // edges.push(customEdge);
-      }
+          // const customEdge = new NewEdge('e2-3', '2', '3', { stroke: '#41B883', strokeWidth: `8px` }, 'true');
+          // edges.push(customEdge);
+        }
 
       // increment node ID:
       nodeId += 1;
@@ -182,8 +182,8 @@ function createNodesAndEdges(tree) {
     }
   }
 
-  // const e = JSON.stringify(initialElements);
-  // console.log('App.vue: edges:', e);
+    // const e = JSON.stringify(initialElements);
+    // console.log('App.vue: edges:', e);
 
   // Add node objects to 'result' array
   for (let i = 0; i < initialElements.length; i++) {
@@ -195,7 +195,7 @@ function createNodesAndEdges(tree) {
   // push edge object into 'result' array
   result.push(...edges);
 
-  return result;
+    return result;
 }
 
 /* uncomment to get AST from elements.js: */
@@ -203,20 +203,16 @@ const initialElements = createNodesAndEdges(tree);
 const elements = ref(initialElements);
 
 /* Uncomment to get AST from panel.ts: */
-// let parsedTree;
-// let parsed = ref('this is where parsed data should be')
-// let parsedHC = ref('this is where hardcoded data should be')
-// const elements = ref([]);
+let parsedTree;
+const elements = ref([]);
 
 window.addEventListener("message", async (event) => {
   const message = await event.data;
-  if (message.type === "parsed-data") {
-    parsedHC.value = tree; // console.log
+  if (message.type === 'parsed-data') {
     parsedTree = message.value;
   }
-  const initialElements = createNodesAndEdges(parsedTree);
-  parsed.value = initialElements; // console.log
-  elements.value = initialElements;
+  const initialElementsArr = createNodesAndEdges(parsedTree);
+  elements.value = initialElementsArr;
 });
 
 /**
@@ -243,12 +239,10 @@ const {
  * onPaneReady is called when viewpane & nodes have visible dimensions
  */
 
-// What does this do????
 onPaneReady(({ fitView }) => {
   fitView();
 });
 
-// What does this do????
 onNodeDragStop((e) => console.log("drag stop", e));
 
 /**
@@ -256,7 +250,6 @@ onNodeDragStop((e) => console.log("drag stop", e));
  * You can add additional properties to your new edge (like a type or label) or block the creation altogether
  */
 
-// What is this doing exactly????
 onConnect((params) => addEdges(params));
 
 // initialize 'dark' in state and set to false:
@@ -349,11 +342,30 @@ function toggleClass() {
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap');
 
 html,
-body,
-#app {
+body {
+  height: 100vh;
+  width: 100%;
   margin: 0;
   height: 100%;
-  /* background-color: var(--vscode-input-background); */
+  /* background-color: var(--vscode-input-background);
+  overflow-x: hidden;
+  margin-left: -1%; */
+}
+#app {
+  /* background: #FBFAF5;
+  height: inherit;
+  width: inherit; */
+}
+.fileImport {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+.fileInput {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  color: black;
 }
 
 #app {
