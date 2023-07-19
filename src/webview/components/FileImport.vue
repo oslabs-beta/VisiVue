@@ -6,9 +6,6 @@
 </template>
 
 <script setup>
-  // import { ref } from 'vue';
-  // note that state using ref are objects so u have to access the value prop to get the value
- 
 
   const vscode = acquireVsCodeApi();
 	function handleFileUpload(event) {

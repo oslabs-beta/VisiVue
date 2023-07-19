@@ -1,5 +1,5 @@
 <script setup>
-  import { Handle, Position } from '@vue-flow/core'
+  import { Handle, Position } from '@vue-flow/core';
 
   const props = defineProps({
     data: {

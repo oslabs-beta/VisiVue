@@ -147,7 +147,7 @@ function createNodesAndEdges(tree) {
         if (newNode.data.oneway.length || newNode.data.twoway.length) {
           animated = true;
           strokeWidth = "4px";
-        }
+        } else { strokeWidth = "2px"}
 
         // assign edge color based on stateful variables:
         let color;
@@ -203,8 +203,8 @@ const initialElements = createNodesAndEdges(tree);
 const elements = ref(initialElements);
 
 /* Uncomment to get AST from panel.ts: */
-let parsedTree;
-const elements = ref([]);
+// let parsedTree;
+// const elements = ref([]);
 
 window.addEventListener("message", async (event) => {
   const message = await event.data;
@@ -347,14 +347,13 @@ body {
   width: 100%;
   margin: 0;
   height: 100%;
-  /* background-color: var(--vscode-input-background);
+  /* background-color: var(--vscode-input-background); */
   overflow-x: hidden;
-  margin-left: -1%; */
+  margin-left: -.8%;
 }
 #app {
-  /* background: #FBFAF5;
   height: inherit;
-  width: inherit; */
+  width: inherit;
 }
 .fileImport {
   position: fixed;
