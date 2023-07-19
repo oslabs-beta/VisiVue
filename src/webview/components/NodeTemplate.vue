@@ -24,32 +24,26 @@
   if (oneway.length && twoway.length) handleColor = "rgb(244, 102, 102)";
   else if (oneway.length) handleColor = "rgb(66, 136, 242)";
   else if (twoway.length) handleColor = "rgb(66, 211, 146)";
-
 </script>
 
 <template>
   <div id="label">{{ label }}</div>
-
-<div
-  style="display: flex; flex-direction: row; align-self: center; justify-content: center; max-width: 90%; margin: auto; gap: 3px"
->
+  <div
+    style="display: flex; flex-direction: row; align-self: center; justify-content: center; max-width: 90%; margin: auto; gap: 3px"
+  >
   <div id="variable-container">
     <div class="oneway">
       <template v-for="vars of oneway" >
         <p class="p-one" type="text">{{ vars }}</p>
       </template>
     </div>
-
-    
     <div class="twoway">
       <template v-for="vars of twoway" >
         <p class="p-two" type="text">{{ vars }}</p>
       </template>
     </div>
-    
   </div>
 </div>
-
   <Handle id="a" type="target" :style="{ '--vf-handle': handleColor }" :position="Position.Top" />
   <Handle id="b" type="source" :position="Position.Bottom" />
 </template>

@@ -6,8 +6,8 @@
 </template>
 
 <script setup>
-
   const vscode = acquireVsCodeApi();
+
 	function handleFileUpload(event) {
     event.preventDefault();
     const filePath = event.target.files[0].path;
@@ -18,9 +18,7 @@
         value: filePath
       });
 		}
-    // console.log('Import file button clicked');
 	}
-
 </script>
 
 <style scoped>
@@ -49,7 +47,6 @@
     rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
   }
   #container:hover {
-  /* box-shadow: 0 .1rem 1rem .2rem rgba(65, 184, 131, .4); */
   box-shadow: rgba(66, 211, 146, .2) 0px 1px 2px, rgba(66, 211, 146, .2) 0px 2px 4px,
   rgba(66, 211, 146, .4) 0px 4px 8px, rgba(66, 211, 146, .4) 0px 8px 16px,
   rgba(66, 211, 146, .5) 0px 12px 32px, rgba(100, 126, 255, .8) 0px 18px 64px;
@@ -87,5 +84,4 @@
   #file-input::file-selector-button {
     cursor: pointer;
   }
-  
 </style>

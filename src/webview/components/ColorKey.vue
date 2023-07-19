@@ -1,12 +1,10 @@
 <template>
-
   <div id="key-container">
     <h6 id="title">Color Key</h6>
     <p id="one-way">One-way</p>
     <p id="two-way">Two-way</p>
     <p id="both">Both</p>
   </div>
-  
 </template>
 
 <style>
@@ -58,5 +56,4 @@
     text-shadow: 0 4px 12px rgba(0, 0, 0, .3);
     margin-bottom: .4rem;
   }
-
 </style>

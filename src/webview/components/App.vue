@@ -169,9 +169,6 @@ function createNodesAndEdges(tree) {
           animated
         );
         edges.push(newEdge);
-
-          // const customEdge = new NewEdge('e2-3', '2', '3', { stroke: '#41B883', strokeWidth: `8px` }, 'true');
-          // edges.push(customEdge);
         }
 
       // increment node ID:
@@ -228,71 +225,14 @@ const {
   toObject,
 } = useVueFlow();
 
-/**
- * Our elements
- */
-// const elements = ref(initialElements); //  imports array of nodes and edges and stores to state (at 'elements.value')
-
-/**
- * This is a Vue Flow event-hook which can be listened to from anywhere you call the composable, instead of only on the main component
- *
- * onPaneReady is called when viewpane & nodes have visible dimensions
- */
-
 onPaneReady(({ fitView }) => {
   fitView();
 });
 
 onNodeDragStop((e) => console.log("drag stop", e));
 
-/**
- * onConnect is called when a new connection is created.
- * You can add additional properties to your new edge (like a type or label) or block the creation altogether
- */
-
 onConnect((params) => addEdges(params));
 
-// initialize 'dark' in state and set to false:
-const dark = ref(false);
-
-/**
- * To update node properties you can simply use your elements v-model and mutate the elements directly
- * Changes should always be reflected on the graph reactively, without the need to overwrite the elements
- */
-
-// Currently randomizes node positions, called on click of Panel button.  Change this to switch from vertical tree to horizontal tree:
-function updatePos() {
-  return elements.value.forEach((el) => {
-    if (isNode(el)) {
-      el.position = {
-        // What is this doing exactly???
-        x: Math.random() * 400,
-        y: Math.random() * 400,
-      };
-    }
-  });
-}
-
-/**
- * toObject transforms your current graph data to an easily persist-able object
- */
-// Invoked on click of Panel button:
-function logToObject() {
-  return console.log(toObject());
-}
-
-/**
- * Resets the current viewpane transformation (zoom & pan)
- */
-// Change this to re-render the file in Vue Flow:
-function resetTransform() {
-  return setTransform({ x: 0, y: 0, zoom: 1 });
-}
-
-//
-function toggleClass() {
-  return (dark.value = !dark.value);
-}
 </script>
 
 <template>
@@ -300,7 +240,6 @@ function toggleClass() {
     <div style="position: fixed; z-index: 2">
       <FileImport />
     </div>
-    
   </div>
 
   <VueFlow
@@ -416,28 +355,6 @@ body {
   /* transition-timing-function: ease-in-out; */
 }
 
-.basicflow.dark {
-  background: #272727;
-  color: rgba(0, 0, 0, 0.2);
-}
-
-.basicflow.dark .vue-flow__node {
-  background: #494949;
-  color: #fffffb;
-  border: 2px solid rgb(149, 0, 255);
-}
-
-.basicflow.dark .vue-flow__controls .vue-flow__controls-button {
-  background: #292524;
-  fill: #fffffb;
-  border-color: #fffffb;
-}
-.basicflow.dark .vue-flow__edge-textbg {
-  fill: #292524;
-}
-.basicflow.dark .vue-flow__edge-text {
-  fill: #fffffb;
-}
 .basicflow .controls {
   display: flex;
   flex-wrap: wrap;
