@@ -1,11 +1,13 @@
 <template>
-  <input id="file-import" type="file" @change="handleFileUpload">
+  <div id="container">
+      <div id="button">Import File</div>
+      <input id="file-input" type="file" @change="handleFileUpload" />
+    </div>
 </template>
 
 <script setup>
-  import { ref } from 'vue';
-
   const vscode = acquireVsCodeApi();
+
 	function handleFileUpload(event) {
     event.preventDefault();
     const filePath = event.target.files[0].path;
@@ -17,43 +19,69 @@
       });
 		}
 	}
-
 </script>
 
-<style>
-  #file-import {
-      background-color: #e5e4df;
-      color: black;
-      /* transform-origin: top left; */
-      width: 7rem;
-      height: 3.5rem;
-      border: 1px solid #d2d1cc;
-      border-radius: 0 1rem 1rem 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      margin-top: 5rem;
-      box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-  }
-  #file-input {
-    display: none;
-    
-  }
-  #file-input-label {
-    display: flex;
-    align-self: center;
-    justify-self: center;
+<style scoped>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap');
+
+  #container {
+    position: relative;
+    overflow: hidden;
     width: 7rem;
     height: 3.5rem;
-    border-radius: 0 1rem 1rem 0;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 1.5rem;
-    text-shadow: 0 1.5rem 2rem 2rem rgba(3, 3, 3, .8);
+    background: #3c3c3c;
+    border: 1px solid rgb(105, 105, 105);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    font-size: 1rem;
+    font-weight: strong;
+    min-width: 12rem;
+    min-height: 4rem;
+    border-radius: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px,
+    rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px,
+    rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
   }
-  /* #file-input-label:hover {
-    background-color: blueviolet;
-    border: 1px solid black;
-    cursor: grab;
-  } */
+  #container:hover {
+  box-shadow: rgba(66, 211, 146, .2) 0px 1px 2px, rgba(66, 211, 146, .2) 0px 2px 4px,
+  rgba(66, 211, 146, .4) 0px 4px 8px, rgba(66, 211, 146, .4) 0px 8px 16px,
+  rgba(66, 211, 146, .5) 0px 12px 32px, rgba(100, 126, 255, .8) 0px 18px 64px;
+  transition-duration: .5s;
+  transition-timing-function: ease;
+  cursor: pointer;
+  } 
+  #button {
+    background: -webkit-linear-gradient(315deg,rgb(66, 211, 146) 25%,rgb(100, 126, 255));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    position: absolute;
+    top: 0p;
+    width: 8rem;
+    height: 3.4rem;
+    text-align: center;
+    margin-top: 2.2rem;
+    cursor: pointer;
+    padding-top: 0;
+    padding-bottom: .2rem;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, .3);
+    cursor: pointer;
+  }
+  #file-input/*::file-selector-button*/ {
+    width: 7rem;
+    height: 3.5rem;
+    opacity: 0.0;
+    margin-top: 1rem;
+    cursor: pointer;
+  }
+  #file-input::file-selector-button {
+    cursor: pointer;
+  }
 </style>
