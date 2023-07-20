@@ -44,7 +44,7 @@ export class Parser {
       error: ''
     };
     this.tree = root;
-		// store AST that parser function creates (Array of Objects) in AST variable to send to panel.ts 
+		// store AST that parser function creates one large AST (One object with nested children) to send to Vue Flow
     this.parser(this.tree);
     return this.tree;
   }
@@ -56,6 +56,7 @@ export class Parser {
 		// iterate through tree 
 		while(queue.length !== 0) {
 			let curr: any = queue.shift();
+      // console.log(curr.name)
       // A check to see if the current node shifted out of the queue is one we want to iterate over or not.
       if (curr === 'dead') {continue;}
 			let sourceCode: string = readFileSync(path.resolve(curr.filePath)).toString();
@@ -83,19 +84,20 @@ export class Parser {
               }
               goodToCreateNode = true;
               break;
-            }
+            } 
           }
         }
+        
         if (goodToCreateNode) {
           const newFileDirname = path.dirname(filePath);
           const childSourceCode = readFileSync(path.resolve(filePath)).toString();
           // Handles edge cases for components that have no script tag, but have template tags (icons, etc.)
           if (!childSourceCode.includes('script' || 'script setup')) {break;};
           const childNode = {
-            id,
+            id: id,
             name: arrOfChildren[i],
             fileName: `${arrOfChildren[i]}.vue`,
-            filePath,
+            filePath: filePath,
             fileDirname: newFileDirname,
             importPath: '/',
             parentList: [],
@@ -143,7 +145,10 @@ export class Parser {
     transform(ast, {
       nodeTransforms: [
         (node) => {
+          // console.log('NODE: ', node)
+          
           // Refer to vueCompilerTypes.txt at the root level to understand what each type refers to.
+          // Dont need to iterate through props because there can only be one v-model tag per component
           if (node.hasOwnProperty('tag') && node['tag'] === component) {
             if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name === 'model')) {
               const twoWayDirective = node.props.find((prop) => prop.type === 7 && prop.name === 'model');
@@ -155,17 +160,19 @@ export class Parser {
                 }
               } catch(error){
               }
-            } else if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name !== 'model')){
-              const oneWayDirective = node.props.find((prop) => prop.type === 7 && prop.name !== 'model');
-              try {
-                if (oneWayDirective['arg'] !== undefined) {
-                  variables.oneway.push(oneWayDirective['arg'].content);
-                } else {
-                  variables.oneway.push(oneWayDirective['exp'].content);
-
+            } 
+            // iterate through props because there can be multiple one way props passed down into each component
+            if (node.type === 1 && node.props.some((prop) => (prop.type === 7 || prop.type === 6 ) && prop.name !== 'model')){
+              node.props.forEach(currnode => {
+                if (currnode.type === 7 && currnode.name !== 'model') {
+                  if (currnode['arg'] !== undefined) {
+                    variables.oneway.push(currnode.arg['content']);
+                  } else {
+                    variables.oneway.push(currnode.exp['content']);
+                  }
                 }
-              } catch(error){
-              }
+              })
+              
             }
           }
         }
