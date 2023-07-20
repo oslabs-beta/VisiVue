@@ -70,7 +70,7 @@
     margin-top: 2.2rem;
     cursor: pointer;
     padding-top: 0;
-    padding-bottom: .2rem;
+    padding-bottom: .4rem;
     text-shadow: 0 4px 12px rgba(0, 0, 0, .3);
     cursor: pointer;
   }
