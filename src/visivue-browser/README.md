@@ -1,10 +1,10 @@
-# Vue 3 + TypeScript + Vite
+# VisiVue Browser
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This app is a cloned version of the VS Code Extension VisiVue.  VisiVue Browser is intended as a development tool, allowing hot-module reloading, logging and receiving messages in the console, and the use of Chrome Developer Tools.
 
 ## Recommended IDE Setup
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Yada yada yada.
 
 ## Type Support For `.vue` Imports in TS
 
