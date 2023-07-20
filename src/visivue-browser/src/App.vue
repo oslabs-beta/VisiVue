@@ -1,5 +1,7 @@
 <script setup>
 import {
+  Panel,
+  PanelPosition,
   VueFlow,
   isNode,
   useVueFlow,
@@ -8,10 +10,10 @@ import { Background } from "@vue-flow/background";
 import { Controls } from "@vue-flow/controls";
 import { MiniMap } from "@vue-flow/minimap";
 import { ref } from "vue";
-import Node from "./NodeTemplate";
-import FileImport from "./FileImport";
-import { tree } from "./elements";
-import ColorKey from "./ColorKey.vue";
+import { tree } from "./components/elements";
+import FileImport from "./components/FileImport.vue"
+import Node from "./components/NodeTemplate.vue";
+import ColorKey from "./components/ColorKey.vue";
 
 // Create an array of nodes and edges objects:
 function createNodesAndEdges(tree) {
@@ -193,12 +195,12 @@ function createNodesAndEdges(tree) {
 }
 
 /* uncomment to get AST from elements.js: */
-// const initialElements = createNodesAndEdges(tree);
-// const elements = ref(initialElements);
+const initialElements = createNodesAndEdges(tree);
+const elements = ref(initialElements);
 
 /* Uncomment to get AST from panel.ts: */
-let parsedTree;
-const elements = ref([]);
+// let parsedTree;
+// const elements = ref([]);
 
 window.addEventListener("message", async (event) => {
   const message = await event.data;
@@ -277,14 +279,14 @@ body {
   width: 100%;
   margin: 0;
   height: 100%;
-  /* background-color: var(--vscode-input-background); */
+  /* Do not set a background color for VS Code Extension, by not setting a color, the background will be the same color as the user's VS Code theme */
+  background-color: #272727;
+  /* this is for VS Code ---> */
   overflow-x: hidden;
   margin-left: -0.8%;
+  /* <--- this is for VS Code */
 }
-#app {
-  height: inherit;
-  width: inherit;
-}
+
 .fileImport {
   position: fixed;
   top: 0;
@@ -298,6 +300,10 @@ body {
 }
 
 #app {
+  /* this is for VS Code ---> */
+  height: inherit;
+  width: inherit;
+  /* <--- this is for VS Code */
   font-family: "Inter", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -338,10 +344,13 @@ body {
 }
 
 .basicflow .vue-flow__node:hover {
-  box-shadow: 0 .1rem 1rem .2rem rgba(255, 255, 255, 0.4);
+  /* box-shadow: 0 .1rem 1rem .2rem rgba(255, 255, 255, 0.4); */
   box-shadow: rgba(66, 211, 146, 0.3) 0px 1px 2px,
     rgba(66, 211, 146, 0.2) 0px 2px 4px, rgba(66, 211, 146, 0.3) 0px 4px 8px,
     rgba(66, 211, 146, 0.3) 0px 8px 16px, rgba(100, 126, 255, 0.8) 0px 8px 18px;
+  transition-duration: 0.5s;
+  transition-timing-function: ease;
+  /* transition-timing-function: ease-in-out; */
 }
 
 .basicflow .controls {

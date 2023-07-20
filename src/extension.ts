@@ -1,41 +1,25 @@
-import * as vscode from 'vscode';
-import Panel from './panel';
+import * as vscode from "vscode";
+import Panel from "./panel";
 
 export function activate(context: vscode.ExtensionContext) {
-	
-	let test = vscode.commands.registerCommand('extension.testPanel', () => {
-		vscode.window.showInformationMessage('A message to test for reloads.');
-	});
+  let disposable = vscode.commands.registerCommand(
+    "extension.showPanel",
+    () => {
+      // @ts-ignore
+      Panel.createOrShow(context);
+    }
+  );
 
-	context.subscriptions.push(test);
+  context.subscriptions.push(disposable);
 
-	let disposable = vscode.commands.registerCommand('extension.showPanel', () => {
-		vscode.window.showInformationMessage('Panel shown from extension.');
-		Panel.createOrShow(context);
-	});
+  // Create VisiVue status bar button in the bottom right of vscode
+  const item = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Right
+  );
 
-	context.subscriptions.push(disposable);
+  item.command = "extension.showPanel";
+  item.tooltip = "Activate VisiVue Extension";
+  item.text = "$(type-hierarchy) Launch VisiVue";
+  item.show();
 }
 export function deactivate() {}
-
-
-
-
-// ------------------------- REACT TREE ----------------------------
-// export function activate(extContext: vscode.ExtensionContext) {
-//   extContext.subscriptions.push(
-//     vscode.commands.registerCommand('reacTree.start', () => {
-//       ReacTreePanel.createOrShow(extContext);
-//     })
-//   );
-  
-//   // Create reacTree status bar button
-//   const item = vscode.window.createStatusBarItem(
-//     vscode.StatusBarAlignment.Right
-//   );
-
-//   item.command = 'reacTree.start';
-//   item.tooltip = 'Activate ReacTree';
-//   item.text = '$(type-hierarchy) Start Tree';
-//   item.show();
-// }
