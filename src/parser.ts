@@ -3,7 +3,7 @@ import { Tree } from './types/Tree';
 import { readFileSync } from 'fs';
 import * as vueCompiler from '@vue/compiler-sfc';
 import { parse, transform } from '@vue/compiler-dom';
-
+ 
 export class Parser {
   entryFile: string;
   tree: Tree | undefined;

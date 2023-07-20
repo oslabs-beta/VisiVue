@@ -3,7 +3,7 @@
 <p>
 <h1>VisiVue (Beta)</h1>
 As applications built in Vue JS scale in size and complexity, developers tasked with their maintenance and management often face challenges, particularly when dealing with unanticipated side-effects caused by two-way data binding. This is where VisiVue comes in. VisiVue is a VS Code extension that aims to fulfill our mission of providing Vue developers with deeper insight into their application's structure, data flow, and state management as it scales.
-
+ 
 <br>
 <br>
 
