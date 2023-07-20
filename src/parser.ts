@@ -148,13 +148,22 @@ export class Parser {
             if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name === 'model')) {
               const twoWayDirective = node.props.find((prop) => prop.type === 7 && prop.name === 'model');
               try {
+                if (twoWayDirective['arg'] !== undefined) {
                 variables.twoway.push(twoWayDirective['arg'].content);
+                } else {
+                  variables.twoway.push(twoWayDirective['exp'].content)
+                }
               } catch(error){
               }
             } else if (node.type === 1 && node.props.some((prop) => prop.type === 7 && prop.name !== 'model')){
               const oneWayDirective = node.props.find((prop) => prop.type === 7 && prop.name !== 'model');
               try {
-                variables.oneway.push(oneWayDirective['arg'].content);
+                if (oneWayDirective['arg'] !== undefined) {
+                  variables.oneway.push(oneWayDirective['arg'].content);
+                } else {
+                  variables.oneway.push(oneWayDirective['exp'].content);
+
+                }
               } catch(error){
               }
             }

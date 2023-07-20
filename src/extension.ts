@@ -3,7 +3,7 @@ import Panel from "./panel";
 
 export function activate(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand(
-    "extension.showPanel",
+    "extension.showPanels",
     () => {
       // @ts-ignore
       Panel.createOrShow(context);
@@ -17,7 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.StatusBarAlignment.Right
   );
 
-  item.command = "extension.showPanel";
+  item.command = "extension.showPanels";
   item.tooltip = "Activate VisiVue Extension";
   item.text = "$(type-hierarchy) Launch VisiVue";
   item.show();
