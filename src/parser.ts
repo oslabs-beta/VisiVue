@@ -171,8 +171,7 @@ export class Parser {
                     variables.oneway.push(currnode.exp['content']);
                   }
                 }
-              })
-              
+              });
             }
           }
         }
