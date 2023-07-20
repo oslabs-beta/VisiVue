@@ -14,7 +14,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "extension.showPanel",
+        "command": "extension.showPanels",
         "title": "Show VisiVue Panel"
       },
       {
