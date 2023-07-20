@@ -1,5 +1,7 @@
 <script setup>
 import {
+  Panel,
+  PanelPosition,
   VueFlow,
   isNode,
   useVueFlow,
@@ -8,10 +10,10 @@ import { Background } from "@vue-flow/background";
 import { Controls } from "@vue-flow/controls";
 import { MiniMap } from "@vue-flow/minimap";
 import { ref } from "vue";
-import Node from "./NodeTemplate";
-import FileImport from "./FileImport";
-import { tree } from "./elements";
-import ColorKey from "./ColorKey.vue";
+import { tree } from "./components/elements";
+import FileImport from "./components/FileImport.vue"
+import Node from "./components/NodeTemplate.vue";
+import ColorKey from "./components/ColorKey.vue";
 
 // Create an array of nodes and edges objects:
 function createNodesAndEdges(tree) {
@@ -277,14 +279,14 @@ body {
   width: 100%;
   margin: 0;
   height: 100%;
-  /* background-color: var(--vscode-input-background); */
+  /* Do not set a background color for VS Code Extension, by not setting a color, the background will be the same color as the user's VS Code theme */
+  background-color: #272727;
+  /* this is for VS Code ---> */
   overflow-x: hidden;
   margin-left: -0.8%;
+  /* <--- this is for VS Code */
 }
-#app {
-  height: inherit;
-  width: inherit;
-}
+
 .fileImport {
   position: fixed;
   top: 0;
@@ -298,6 +300,10 @@ body {
 }
 
 #app {
+  /* this is for VS Code ---> */
+  height: inherit;
+  width: inherit;
+  /* <--- this is for VS Code */
   font-family: "Inter", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
