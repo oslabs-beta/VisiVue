@@ -166,13 +166,9 @@ body {
 }
 
 .basicflow .vue-flow__node:hover {
-  /* box-shadow: 0 .1rem 1rem .2rem rgba(255, 255, 255, 0.4); */
   box-shadow: rgba(66, 211, 146, 0.3) 0px 1px 2px,
     rgba(66, 211, 146, 0.2) 0px 2px 4px, rgba(66, 211, 146, 0.3) 0px 4px 8px,
     rgba(66, 211, 146, 0.3) 0px 8px 16px, rgba(100, 126, 255, 0.8) 0px 8px 18px;
-  transition-duration: 0.5s;
-  transition-timing-function: ease;
-  /* transition-timing-function: ease-in-out; */
 }
 
 .basicflow .controls {
