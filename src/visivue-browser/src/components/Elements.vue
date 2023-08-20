@@ -1,3 +1,4 @@
+<script>
 
 export const tree = {
   children: [{
@@ -240,6 +241,4 @@ export const tree = {
   thirdParty: false,
   // [[Prototype]]: Object,
 };
-
-       
-
+</script>
