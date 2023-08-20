@@ -5,11 +5,12 @@ export type Tree = {
   filePath: string;
   fileDirname: string;
   importPath: string;
-  children: {}[];
+  children: Tree[];
   parentList: string[];
   props: {
     oneWay: string[];
     twoWay: string[];
   };
   error: string;
+  parentId?: string;
 };
