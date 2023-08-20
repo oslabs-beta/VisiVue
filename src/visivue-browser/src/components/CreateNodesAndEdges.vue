@@ -1,8 +1,11 @@
-<script>
+<script lang="ts">
+import { Tree } from "../types/Tree.vue";
+import { NodePosition, Positions, Data, Node } from "../types/Node.vue";
+import { Style, Edge } from "../types/Edge.vue";
 
-export function createNodesAndEdges(tree) {
-  // Node factory func:
-  function NewNode(id, type, label, position, parentId, data) {
+export function createNodesAndEdges(tree: Tree): (Node | Edge)[] {
+  // NODE FACTORY FUNCTION
+  function NewNode(this: any, id: string, type: string, label: string, position: NodePosition, parentId: string, data: Data): void {
     this.id = id;
     this.type = type;
     this.label = label;
@@ -10,10 +13,11 @@ export function createNodesAndEdges(tree) {
     this.parentId = parentId;
     this.data = data;
     this.class = "light";
+    
   }
-  // Edge factory function
-  function NewEdge(id, source, target, style, animated) {
-    this.id = id;
+  // EDGE FACTORY FUNCTION
+  function NewEdge(this: any, edgeId: string, source: string, target: string, style: Style, animated: boolean): void {
+    this.id = edgeId;
     this.label;
     this.source = source;
     this.target = target;
@@ -21,160 +25,123 @@ export function createNodesAndEdges(tree) {
     this.animated = animated;
   }
 
-  // initialize variables
-  const result = [];
-  const levels = [];
-  const edges = [];
+  // INITIALIZE CONSTANTS AND HELPER DATA STRUCTURES
+  const arrayOfNodesAndEdges: (Node | Edge)[] = [];
+  const arrayOfNodes: Node[][] = [];
+  const arrayOfEdges: Edge[] = [];
+  const queue: Tree[] = [];
 
-  const q = [];
   if (tree) {
-    q.push(tree);
+    queue.push(tree);
   }
 
-  let nodeId = 1;
-
-  const pos = {
+  // ID FOR FIRST NODE OF AST. INITIALIZES FOR NODE ID FOR BUILDING OF POSITIONS
+  let nodeId: number = 1;
+  const positions: Positions = {
     lastNode: 1,
     1: { x: 0, y: 0 },
   };
 
-  // traverse the tree and build node and edge objects
-  while (q.length) {
-    const level = [];
-    const l = q.length;
+  // TRAVERSE THE TREE USING BREADTH FIRST SEARCH
+  while (queue.length) {
+    const level: Node[] = [];
+    const queueLength: number = queue.length;
 
-    for (let i = 0; i < l; i++) {
-      // initialize variables and save to respective values:
-      const node = q.shift();
-      let type = "template";
-      let newPos = pos[nodeId];
-      let parentId = "";
+    for (let i = 0; i < queueLength; i++) {
+      // INITIALIZE VARIABLES NEEDED FOR EACH NODE
+      // @ts-ignore
+      const node: Tree  = queue.shift();
+      let type: string = "template"; // --> 'type' refers to handles on VueFlow nodes (i.e. handle on top and bottom of node)
+      let newPosition: NodePosition = positions[nodeId];
+      let parentId: string = "";
+      const oneway: string[] = node.props.oneWay;
+      const twoway: string[] = node.props.twoWay;
+      const data: Data = { oneway, twoway };
+      if (!arrayOfNodes.length) type = "input";
 
-      // Add oneway and twoway props from AST to 'data' to be passed into a new instance of NewNode:
-      const oneway = node.props.oneWay;
-      const twoway = node.props.twoWay;
-      const data = { oneway, twoway };
+      if (node.parentId) parentId = node.parentId;
 
-      // change 'type' property based on if the node is a root node or leaf node:
-      if (!levels.length) {
-        type = "input";
-      }
-
-      // if the current node in the AST has a parentId property, assign it to 'parentId'
-      if (node.parentId) {
-        parentId = node.parentId;
-      }
-
-      // instantiate a new node and push to 'levels' array:
-      const newNode = new NewNode(
-        nodeId,
+      // INSTANTIATE NEW NODE & PUSH TO 'level' array
+      const newNode: Node = new (NewNode as any)(
+        nodeId.toString(),
         type,
         node.name,
-        newPos,
+        newPosition,
         parentId,
         data
       );
+
       level.push(newNode);
 
-      // If the current node has children, push its children to the 'q' and create x and y postions for each child and push them to 'xQ' and 'yQ' respectively
+      // SET X & Y POSITIONS FOR EACH CHILD NODE
       if (node.children.length) {
-        // push all child nodes to 'q'
-        q.push(...node.children);
+        queue.push(...node.children);
 
-        // intialize variable to calculate x and y positions:
-        let horizontalSpace = 250; // horizontal space between sibling nodes
-        let verticalSpace = 150; // vertical space between parent/child nodes
-        let newXPos = -(
-          (node.children.length * horizontalSpace) / 2 -
-          horizontalSpace / 2
+        let xGap: number = 250;
+        let yGap: number = 150;
+        let newXPosition: number = -(
+          (node.children.length * xGap) / 2 -
+          xGap / 2
         );
 
-        // create new x and y positions for each child node:
-
-        // find the id of the last sibling node:
-        let childId = pos.lastNode + 1;
+        let childId: number = positions.lastNode + 1;
 
         for (let i = 0; i < node.children.length; i++) {
-          // initialize x and y positions
-          let x = newNode.position.x + newXPos;
-          let y = newNode.position.y + verticalSpace;
+          let x: number = newNode.position.x + newXPosition;
+          let y: number = newNode.position.y + yGap;
+          let prevNode: NodePosition = positions[childId - 1];
 
-          let prevNode = pos[childId - 1];
-
-          // assign 'x' position based on if the current node is the first in a level or not:
-          if (prevNode.y === y) x = Math.max(prevNode.x + horizontalSpace, x);
-
-          // assign a new property to 'pos' for the current child node
-          pos[childId] = { x, y };
-
-          // update lastNode property on 'pos'
-          pos.lastNode = childId;
-          // update newXPos
-          newXPos += horizontalSpace;
-          // containers[newNode.id].children.push(childId);
-
-          // add a 'parentId' to all children of the current node in the AST:
-          node.children[i].parentId = newNode.id;
-          // increment 'childId'
+          if (prevNode.y === y) x = Math.max(prevNode.x + xGap, x);
+          positions[childId] = { x, y };
+          positions.lastNode = childId;
+          newXPosition += xGap;
+          node.children[i].parentId = newNode.id.toString();
           childId += 1;
         }
       }
 
-      // Instantiate a new edge object and push to 'levels' array
+      // INSTANTIATE NEW EDGE OBJECTS
       if (newNode.parentId) {
-        const id = `e${newNode.parentId}-${newNode.id}`;
+        const onewayLength: number = newNode.data.oneway.length;
+        const twowayLength: number = newNode.data.twoway.length;
+        const edgeId: string = `e${newNode.parentId}-${newNode.id}`;
+        let animated: boolean = false;
+        let strokeWidth: string = "2px";
 
-        // assign edge width and animation based on stateful variables:
-        let animated = false;
-        let strokeWidth;
-        if (newNode.data.oneway.length || newNode.data.twoway.length) {
+        if (onewayLength || twowayLength) {
           animated = true;
           strokeWidth = "4px";
-        } else {
-          strokeWidth = "2px";
         }
+        let color: string = "";
+        if (onewayLength && twowayLength) color = "rgb(244, 102, 102)";
+        else if (onewayLength) color = "rgb(66, 136, 242)";
+        else if (twowayLength) color = "rgb(66, 211, 146)";
 
-        // assign edge color based on stateful variables:
-        let color;
-        if (newNode.data.oneway.length && newNode.data.twoway.length)
-          color = "rgb(244, 102, 102)";
-        // else if (newNode.data.oneway.length) color = 'rgb(255, 72, 72)';
-        // else if (newNode.data.twoway.length) color = 'rgb(0, 102, 255)';
-        else if (newNode.data.oneway.length) color = "rgb(66, 136, 242)";
-        else if (newNode.data.twoway.length) color = "rgb(66, 211, 146)";
+        const style: Style = { stroke: color, strokeWidth };
 
-        const style = { stroke: `${color}`, strokeWidth: `${strokeWidth}` };
-
-        // instantiate a new edge and push to 'levels'
-        const newEdge = new NewEdge(
-          id,
-          `${newNode.parentId}`,
-          `${newNode.id}`,
+        const newEdge = new (NewEdge as any)(
+          edgeId,
+          newNode.parentId,
+          newNode.id,
           style,
           animated
         );
-        edges.push(newEdge);
+        arrayOfEdges.push(newEdge);
       }
-
-      // increment node ID:
       nodeId += 1;
     }
-    if (level.length) {
-      levels.push(level);
-    }
-  }
-  // console.log(levels);
 
-  // Add node objects to 'result' array
-  for (let i = 0; i < levels.length; i++) {
-    for (let j = 0; j < levels[i].length; j++) {
-      result.push(levels[i][j]);
-    }
+    if (level.length) arrayOfNodes.push(level);
   }
 
-  // push edge object into 'result' array
-  result.push(...edges);
+  // PUSH ALL NODE OBJECTS TO OUTPUT ARRAY
+  for (let i = 0; i < arrayOfNodes.length; i++) {
+    arrayOfNodesAndEdges.push(...arrayOfNodes[i]);
+  }
 
-  return result;
+  // PUSH ALL EDGE OBJECTS TO OUTPUT ARRAY
+  arrayOfNodesAndEdges.push(...arrayOfEdges);
+
+  return arrayOfNodesAndEdges;
 }
 </script>

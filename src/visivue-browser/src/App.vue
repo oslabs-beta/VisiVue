@@ -14,7 +14,7 @@ import { tree } from "./components/Elements.vue";
 import FileImport from "./components/FileImport.vue"
 import Node from "./components/NodeTemplate.vue";
 import ColorKey from "./components/ColorKey.vue";
-import { createNodesAndEdges } from "./components/TSCreate.vue";
+import { createNodesAndEdges } from "./components/CreateNodesAndEdges.vue";
 
 /* uncomment to get AST from elements.js: */
 const initialElements = createNodesAndEdges(tree);
