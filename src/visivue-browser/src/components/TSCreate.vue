@@ -109,6 +109,7 @@ export function createNodesAndEdges(tree: Tree): (Node | Edge)[] {
 
     for (let i = 0; i < queueLength; i++) {
       // INITIALIZE VARIABLES NEEDED FOR EACH NODE
+      // @ts-ignore
       const node: Tree = queue.shift();
       let type: string = "template"; // --> 'type' refers to handles on VueFlow nodes (i.e. handle on top and bottom of node)
       let newPosition: NodePosition = positions[nodeId];
