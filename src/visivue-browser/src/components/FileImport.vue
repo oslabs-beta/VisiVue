@@ -5,22 +5,38 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// use inside input element in template --> :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
 
-/* the following code is for VS Code Extension |----> */
-  // const vscode = acquireVsCodeApi();
-	// function handleFileUpload(event) {
-  //   event.preventDefault();
-  //   const filePath = event.target.files[0].path;
-  //   event.target.value = null;
-  //   if (filePath) {
-  //     vscode.postMessage({
-  //       type: "onFile",
-  //       value: filePath
-  //     });
-	// 	}
-	// }
-/* <------| For VS Code Extentsion */
+import { Parser } from './Parser.vue';
+import { createNodesAndEdges } from './CreateNodesAndEdges.vue';
+
+
+defineProps(['modelValue']);
+defineEmits(['update:modelValue']);
+
+	const handleFileUpload = async (event: any) => {
+    event.preventDefault();
+    const filePath = event.target.files[0].path;
+    event.target.value = null;
+    if (filePath) {
+      const parser = await new Parser(filePath);
+      const tree = parser.entryFileParse();
+      const vueFlowArray = createNodesAndEdges(tree);
+		}
+	}
+
+  // THIS IS ONE OPTION PER VUE DOCS: https://vuejs.org/guide/components/v-model.html#v-model-arguments
+  
+  // const value = computed({
+  //   get() {
+  //     return props.elements;
+  //   },
+  //   set(value) {
+  //     emit('update:elements', value);
+  //   }
+  // })
+
 
 </script>
 

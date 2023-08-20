@@ -15,11 +15,13 @@ import FileImport from "./components/FileImport.vue"
 import Node from "./components/NodeTemplate.vue";
 import ColorKey from "./components/ColorKey.vue";
 import { createNodesAndEdges } from "./components/CreateNodesAndEdges.vue";
+import { Parser } from "./components/Parser.vue";
+
+const elements = ref({});
 
 /* uncomment to get AST from elements.js: */
-const initialElements = createNodesAndEdges(tree);
-
-const elements = ref(initialElements);
+// const initialElements = createNodesAndEdges(tree);
+// const elements = ref(initialElements);
 
 /* Uncomment to get AST from panel.ts: */
 // let parsedTree;
@@ -55,7 +57,7 @@ onConnect((params) => addEdges(params));
 <template>
   <div style="display: flex; flex-direction: column">
     <div style="position: fixed; z-index: 2">
-      <FileImport />
+      <FileImport v-model="elements" />
     </div>
   </div>
 

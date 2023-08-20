@@ -1,10 +1,10 @@
-
-
+<script lang="ts">
 import * as path from "path";
-import { Tree } from "./types/Tree";
+import { Tree } from '../types/Tree.vue'
 import { readFileSync } from "fs";
 import * as vueCompiler from "@vue/compiler-sfc";
 import { parse, transform } from "@vue/compiler-dom";
+
 
 export class Parser {
   entryFile: string;
@@ -129,10 +129,10 @@ export class Parser {
             error: "",
           };
           // Access object that stores oneway and twoway data bound variables and push to proper arrays of the newly created node.
-          objOfVariables.twoway.forEach((el) => {
+          objOfVariables.twoway.forEach((el: string) => {
             childNode.props.twoWay.push(el);
           });
-          objOfVariables.oneway.forEach((el) => {
+          objOfVariables.oneway.forEach((el: string) => {
             childNode.props.oneWay.push(el);
           });
           // Here is where the tree is being built out by populating the 'children' array.
@@ -220,3 +220,4 @@ export class Parser {
     return result;
   }
 }
+</script>
