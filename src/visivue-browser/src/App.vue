@@ -243,7 +243,6 @@ onConnect((params) => addEdges(params));
 
   <VueFlow
     v-model="elements"
-    :class="{ dark }"
     class="basicflow"
     :default-viewport="{ zoom: 1.5 }"
     :min-zoom="0.2"
@@ -258,13 +257,13 @@ onConnect((params) => addEdges(params));
       />
     </template>
 
-    <Background :pattern-color="dark ? '#FFFFFB' : '#134c84'" :variant="true" />
+    <Background :pattern-color="'#134c84'" :variant="true" />
 
     <MiniMap />
 
     <Controls />
 
-    <div id="color-key" style="z-index: 1" :position="TopRight">
+    <div id="color-key" style="z-index: 1">
       <ColorKey />
     </div>
   </VueFlow>

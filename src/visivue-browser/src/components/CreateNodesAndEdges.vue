@@ -163,7 +163,7 @@ export function createNodesAndEdges(tree) {
       levels.push(level);
     }
   }
-  console.log(levels);
+  // console.log(levels);
 
   // Add node objects to 'result' array
   for (let i = 0; i < levels.length; i++) {
