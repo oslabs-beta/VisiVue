@@ -174,8 +174,7 @@ export function createNodesAndEdges(tree: Tree): (Node | Edge)[] {
       }
       nodeId += 1;
     };
-
-    // PUSH 'level' TO 'arrayOfNodes'
+    
     if (level.length) arrayOfNodes.push(level);
   }
 
