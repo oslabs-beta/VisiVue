@@ -17,10 +17,10 @@ import ColorKey from "./components/ColorKey.vue";
 import { createNodesAndEdges } from "./components/CreateNodesAndEdges.vue";
 // import { Parser } from "./components/Parser.vue";
 
-const test = ref([]);
+const test = ref([{}]);
 
 const msg = JSON.stringify(test.value);
-console.log('Test:', msg);
+console.log('From App.vue:', msg);
 
 /* uncomment to get AST from elements.js: */
 const initialElements = createNodesAndEdges(tree);
@@ -58,6 +58,7 @@ onConnect((params) => addEdges(params));
 </script>
 
 <template>
+  <div>{{ test }}</div>
   <div style="display: flex; flex-direction: column">
     <div style="position: fixed; z-index: 2">
       <FileImport v-model="test" />

@@ -1,53 +1,52 @@
 
 
 <script setup lang="ts">
+// import { ref } from 'vue';
 // use inside input element in template --> :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
 
 // import { Parser } from './Parser.vue';
 // import { createNodesAndEdges } from './CreateNodesAndEdges.vue';
 // import { tree } from "./components/Elements.vue";
 
-
 defineProps(['modelValue']);
-defineEmits(['update:modelValue']);
+// @ts-ignore
+const emit = defineEmits(['update:modelValue'])
 
+  // STEP 1: UPDATE PARSER TO FUNCTIONAL CLASS
+  // STEP 2: IMPLEMENT CREATENODESANDEDGES INTO PARSER TO REDUCE NUM OF PARSES FROM 2 TO 1
+  // STEP 3: WRITE FUNCTIONALITY TO CALL PARSER AND STORE IN VARIABLE
+  // STEP 4: WHEN UPDATING V-MODEL IN PARENT, CALL EMIT (HERE, IN CHILD COMPONENT) PASSING IN EMIT TAG ('update:modelValue) & EMIT VALUE (array of objects)
 	const handleFileUpload = async (event: any) => {
-    
-
+    // GET FILEPATH FROM EVENT
     event.preventDefault();
-    const filePath = event.target.files[0].path;
-    // event.target.value = null;
+    // const filePath = event.target.files[0].path;
+    event.target.value = null;
 
-    const msg = JSON.stringify(event.target.files);
-    console.log('Test message from FileImport.vue:', msg);
+    // INVOKE PARSER ON FILEPATH & SAVE TO VAR
+    // const AST: {} = new Parser(filePath);
+
+    // INVOKE CREATENODESANDEDGES ON EVRES OF PARSER & SAVE TO VAR
+    // const arrayOfNodesAndEdges = createNodesAndEdges(AST);
+
+    // EMIT EVRES OF CREATENODESANDEDGES TO APP.VUE
+    // emit('update:modelValue', arrayOfNodesAndEdges);
     
-    // if (filePath) {
-    //   const parser = await new Parser(filePath);
-    //   const tree = parser.entryFileParse();
-    //   const vueFlowArray = createNodesAndEdges(tree);
-		// }
+    // const msg = JSON.stringify(XYZ);
+    // console.log('Test message from FileImport.vue:', msg);
+
 	}
-
-
-  // THIS IS ONE OPTION PER VUE DOCS: https://vuejs.org/guide/components/v-model.html#v-model-arguments
-
-  // const value = computed({
-  //   get() {
-  //     return props.elements;
-  //   },
-  //   set(value) {
-  //     emit('update:elements', value);
-  //   }
-  // })
 
 </script>
 
 <template>
   <div id="container">
-      <div id="button">Import File</div>
-      <input id="file-input" type="file" @change="handleFileUpload" :value="modelValue"
-    @input="$emit('update:modelValue', $event.target?.files[0])"/>
-    </div>
+    <div id="button">Import File</div>
+    <input id="file-input" type="file" @change="handleFileUpload" />
+      <!-- <input
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target?.value)"
+      /> -->
+  </div>
 </template>
 
 <style scoped>
@@ -113,4 +112,8 @@ defineEmits(['update:modelValue']);
   #file-input::file-selector-button {
     cursor: pointer;
   }
+  #test {
+    color: white;
+  }
+
 </style>
