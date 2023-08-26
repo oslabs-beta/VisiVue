@@ -1,33 +1,36 @@
-<template>
-  <div id="container">
-      <div id="button">Import File</div>
-      <input id="file-input" type="file" @change="handleFileUpload" />
-    </div>
-</template>
+
 
 <script setup lang="ts">
 // use inside input element in template --> :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
 
-import { Parser } from './Parser.vue';
-import { createNodesAndEdges } from './CreateNodesAndEdges.vue';
+// import { Parser } from './Parser.vue';
+// import { createNodesAndEdges } from './CreateNodesAndEdges.vue';
+// import { tree } from "./components/Elements.vue";
 
 
 defineProps(['modelValue']);
 defineEmits(['update:modelValue']);
 
 	const handleFileUpload = async (event: any) => {
+    
+
     event.preventDefault();
     const filePath = event.target.files[0].path;
-    event.target.value = null;
-    if (filePath) {
-      const parser = await new Parser(filePath);
-      const tree = parser.entryFileParse();
-      const vueFlowArray = createNodesAndEdges(tree);
-		}
+    // event.target.value = null;
+
+    const msg = JSON.stringify(event.target.files);
+    console.log('Test message from FileImport.vue:', msg);
+    
+    // if (filePath) {
+    //   const parser = await new Parser(filePath);
+    //   const tree = parser.entryFileParse();
+    //   const vueFlowArray = createNodesAndEdges(tree);
+		// }
 	}
 
+
   // THIS IS ONE OPTION PER VUE DOCS: https://vuejs.org/guide/components/v-model.html#v-model-arguments
-  
+
   // const value = computed({
   //   get() {
   //     return props.elements;
@@ -37,8 +40,15 @@ defineEmits(['update:modelValue']);
   //   }
   // })
 
-
 </script>
+
+<template>
+  <div id="container">
+      <div id="button">Import File</div>
+      <input id="file-input" type="file" @change="handleFileUpload" :value="modelValue"
+    @input="$emit('update:modelValue', $event.target?.files[0])"/>
+    </div>
+</template>
 
 <style scoped>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap');
