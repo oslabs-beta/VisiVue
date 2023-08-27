@@ -22,6 +22,22 @@ const emit = defineEmits(['update:modelValue'])
     // const filePath = event.target.files[0].path;
     event.target.value = null;
 
+    const msg = {text: 'test from fileImport'};
+    // @ts-ignore
+    const response = await fetch('http://localhost:3000/api', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(msg)
+    })
+
+
+    // SEND FILEPATH TO SERVER (IN BODY)
+    // EMIT SERVER RESPONSE TO APP.VUE
+
+    
+
     // INVOKE PARSER ON FILEPATH & SAVE TO VAR
     // const AST: {} = new Parser(filePath);
 
