@@ -1,28 +1,69 @@
-<template>
-  <div id="container">
-      <div id="button">Import File</div>
-      <input id="file-input" type="file" @change="handleFileUpload" />
-    </div>
-</template>
 
-<script setup>
 
-/* the following code is for VS Code Extension |----> */
-  // const vscode = acquireVsCodeApi();
-	// function handleFileUpload(event) {
-  //   event.preventDefault();
-  //   const filePath = event.target.files[0].path;
-  //   event.target.value = null;
-  //   if (filePath) {
-  //     vscode.postMessage({
-  //       type: "onFile",
-  //       value: filePath
-  //     });
-	// 	}
-	// }
-/* <------| For VS Code Extentsion */
+<script setup lang="ts">
+// import { ref } from 'vue';
+// use inside input element in template --> :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
+
+// import { Parser } from './Parser.vue';
+// import { createNodesAndEdges } from './CreateNodesAndEdges.vue';
+// import { tree } from "./components/Elements.vue";
+
+defineProps(['modelValue']);
+// @ts-ignore
+const emit = defineEmits(['update:modelValue'])
+
+  // STEP 1: UPDATE PARSER TO FUNCTIONAL CLASS
+  // STEP 2: IMPLEMENT CREATENODESANDEDGES INTO PARSER TO REDUCE NUM OF PARSES FROM 2 TO 1
+  // STEP 3: WRITE FUNCTIONALITY TO CALL PARSER AND STORE IN VARIABLE
+  // STEP 4: WHEN UPDATING V-MODEL IN PARENT, CALL EMIT (HERE, IN CHILD COMPONENT) PASSING IN EMIT TAG ('update:modelValue) & EMIT VALUE (array of objects)
+	const handleFileUpload = async (event: any) => {
+    // GET FILEPATH FROM EVENT
+    event.preventDefault();
+    // const filePath = event.target.files[0].path;
+    event.target.value = null;
+
+    const msg = {text: 'test from fileImport'};
+    // @ts-ignore
+    const response = await fetch('http://localhost:3000/api', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(msg)
+    })
+
+
+    // SEND FILEPATH TO SERVER (IN BODY)
+    // EMIT SERVER RESPONSE TO APP.VUE
+
+    
+
+    // INVOKE PARSER ON FILEPATH & SAVE TO VAR
+    // const AST: {} = new Parser(filePath);
+
+    // INVOKE CREATENODESANDEDGES ON EVRES OF PARSER & SAVE TO VAR
+    // const arrayOfNodesAndEdges = createNodesAndEdges(AST);
+
+    // EMIT EVRES OF CREATENODESANDEDGES TO APP.VUE
+    // emit('update:modelValue', arrayOfNodesAndEdges);
+    
+    // const msg = JSON.stringify(XYZ);
+    // console.log('Test message from FileImport.vue:', msg);
+
+	}
 
 </script>
+
+<template>
+  <div id="container">
+    <div id="button">Import File</div>
+    <input id="file-input" type="file" @change="handleFileUpload" />
+      <!-- <input
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target?.value)"
+      /> -->
+  </div>
+</template>
 
 <style scoped>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap');
@@ -87,4 +128,8 @@
   #file-input::file-selector-button {
     cursor: pointer;
   }
+  #test {
+    color: white;
+  }
+
 </style>

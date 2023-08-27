@@ -1,7 +1,5 @@
-
-
 import * as path from "path";
-import { Tree } from "./types/Tree";
+import { Tree } from "../../src/types/Tree.vue";
 import { readFileSync } from "fs";
 import * as vueCompiler from "@vue/compiler-sfc";
 import { parse, transform } from "@vue/compiler-dom";

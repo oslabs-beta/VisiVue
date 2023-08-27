@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "concurrently 'vite' 'nodemon server/index.js'",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
@@ -20,6 +21,7 @@
     "@vue-flow/minimap": "^1.1.1",
     "@vue/cli-init": "^5.0.8",
     "@vue/compiler-sfc": "^3.3.4",
+    "express": "^4.18.2",
     "vue": "^3.2.47"
   },
   "devDependencies": {
@@ -31,6 +33,7 @@
     "@vue/eslint-config-typescript": "^11.0.3",
     "@vue/test-utils": "^2.4.1",
     "@vue/tsconfig": "^0.4.0",
+    "concurrently": "^8.2.1",
     "cypress": "^12.17.4",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
@@ -38,6 +41,7 @@
     "eslint-plugin-vue": "^9.15.0",
     "javascript": "^1.0.0",
     "jsdom": "^22.1.0",
+    "nodemon": "^3.0.1",
     "prettier": "^2.8.8",
     "typescript": "^5.0.2",
     "vite": "^4.3.9",
