@@ -50,7 +50,7 @@
     "typescript": "^5.1.5",
     "vue-template-babel-compiler": "^2.0.0",
     "webpack": "^5.85.0",
-    "webpack-cli": "^5.1.1"
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
     "@babel/preset-env": "^7.22.5",
